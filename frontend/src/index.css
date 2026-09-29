@@ -54,7 +54,7 @@ html, body {
 }
 
 /* ============================================
-   Left Panel â€” Studio / Branding
+   Left Panel — Studio / Branding
    ============================================ */
 .studio-panel {
   position: relative;
@@ -155,7 +155,7 @@ html, body {
 }
 
 /* ============================================
-   Panel Art â€” Orbits, Pulses & Data Viz
+   Panel Art — Orbits, Pulses & Data Viz
    ============================================ */
 .panel-art {
   position: absolute;
@@ -810,7 +810,7 @@ input[type="text"] {
   animation: fade-slide-up 0.3s ease-out both;
 }
 /* ============================================
-   Responsive â€” Tablet & Mobile
+   Responsive — Tablet & Mobile
    ============================================ */
 @media (max-width: 880px) {
   .auth-shell {

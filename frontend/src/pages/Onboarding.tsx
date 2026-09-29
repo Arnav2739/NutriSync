@@ -17,10 +17,10 @@ export interface OnboardingData {
 }
 
 const GENDER_OPTIONS = [
-  { id: 'Male', label: 'Male', icon: 'â™‚' },
-  { id: 'Female', label: 'Female', icon: 'â™€' },
-  { id: 'Non-Binary', label: 'Non-Binary', icon: 'âš¥' },
-  { id: 'Prefer not to say', label: 'Prefer not to say', icon: 'ðŸ”’' },
+  { id: 'Male', label: 'Male', icon: '♂' },
+  { id: 'Female', label: 'Female', icon: '♀' },
+  { id: 'Non-Binary', label: 'Non-Binary', icon: '⚧' },
+  { id: 'Prefer not to say', label: 'Prefer not to say', icon: '🔒' },
 ];
 
 const GOAL_OPTIONS = [
@@ -29,28 +29,28 @@ const GOAL_OPTIONS = [
     title: 'Build Strength & Muscle',
     desc: 'Hypertrophy, progressive overload, and lean muscle mass accretion',
     badge: 'SURPLUS & HYPERTROPHY',
-    icon: 'ðŸ‹ï¸â€â™‚ï¸'
+    icon: '🏋️'
   },
   {
     id: 'Lose weight',
     title: 'Fat Loss & Definition',
     desc: 'Targeted caloric deficit to shed body fat while preserving lean tissue',
     badge: 'LEAN DEFICIT',
-    icon: 'ðŸ”¥'
+    icon: '🔥'
   },
   {
     id: 'Move daily',
     title: 'Daily Movement & Health',
     desc: 'Metabolic conditioning, cardiovascular stamina, and vitality',
     badge: 'ENDURANCE & VITALITY',
-    icon: 'ðŸƒ'
+    icon: '🏃'
   },
   {
     id: 'Recover better',
     title: 'Mobility & Longevity',
     desc: 'Functional flexibility, joint resilience, and nervous system recovery',
     badge: 'RECOVERY & LONGEVITY',
-    icon: 'ðŸ§˜'
+    icon: '🧘'
   },
 ];
 
@@ -60,42 +60,42 @@ const DIET_OPTIONS = [
     title: 'Standard Omnivore',
     desc: 'Balanced whole foods, lean poultry, meats, produce, grains, and dairy',
     badge: 'BALANCED INTAKE',
-    icon: 'ðŸ¥©'
+    icon: '🥩'
   },
   {
     id: 'High-Protein / Athlete',
     title: 'High-Protein Athlete',
     desc: 'Optimized high-density amino acid profile for tissue repair and strength',
     badge: '2.0G+ / KG PROTEIN',
-    icon: 'ðŸ—'
+    icon: '🍗'
   },
   {
     id: 'Vegetarian',
     title: 'Vegetarian',
     desc: 'Plant-rich whole foods, legumes, dairy, eggs, and grains',
     badge: 'PLANT + DAIRY/EGGS',
-    icon: 'ðŸ¥—'
+    icon: '🥗'
   },
   {
     id: 'Vegan',
     title: '100% Plant-Based / Vegan',
     desc: 'Strictly plant-derived whole foods, grains, legumes, nuts, and seeds',
     badge: '100% PLANT FUEL',
-    icon: 'ðŸŒ±'
+    icon: '🌱'
   },
   {
     id: 'Pescatarian',
     title: 'Pescatarian',
     desc: 'Vegetarian foundation supplemented with wild fish and omega-3s',
     badge: 'SEAFOOD & GREENS',
-    icon: 'ðŸŸ'
+    icon: '🐟'
   },
   {
     id: 'Keto / Low Carb',
     title: 'Ketogenic / Low-Carb',
     desc: 'Healthy fats, moderate protein, and minimal refined carbohydrates',
     badge: '<50G NET CARBS',
-    icon: 'ðŸ¥‘'
+    icon: '🥑'
   },
 ];
 
@@ -105,35 +105,35 @@ const ACTIVITY_OPTIONS = [
     title: 'Sedentary (Desk Life)',
     desc: 'Desk job, minimal structured daily exercise (< 5,000 steps)',
     multiplier: 1.2,
-    icon: 'ðŸ›‹ï¸'
+    icon: '🛋️'
   },
   {
     id: 'Lightly Active',
-    title: 'Lightly Active (1â€“2x/week)',
-    desc: '1â€“2 light workouts per week or consistent 6,000â€“8,000 daily steps',
+    title: 'Lightly Active (1–2x/week)',
+    desc: '1–2 light workouts per week or consistent 6,000–8,000 daily steps',
     multiplier: 1.375,
-    icon: 'ðŸš¶'
+    icon: '🚶'
   },
   {
     id: 'Moderately Active',
-    title: 'Moderately Active (3â€“5x/week)',
-    desc: '3â€“5 structured strength/cardio sessions per week with active lifestyle',
+    title: 'Moderately Active (3–5x/week)',
+    desc: '3–5 structured strength/cardio sessions per week with active lifestyle',
     multiplier: 1.55,
-    icon: 'âš¡'
+    icon: '⚡'
   },
   {
     id: 'Very Active',
-    title: 'Very Active (6â€“7x/week)',
-    desc: '6â€“7 intense training days weekly or physically demanding occupation',
+    title: 'Very Active (6–7x/week)',
+    desc: '6–7 intense training days weekly or physically demanding occupation',
     multiplier: 1.725,
-    icon: 'ðŸ”¥'
+    icon: '🔥'
   },
   {
     id: 'Extra Active',
     title: 'Athletic / High Performance',
     desc: 'Two-a-day training sessions or competitive endurance/strength athlete',
     multiplier: 1.9,
-    icon: 'ðŸš€'
+    icon: '🚀'
   },
 ];
 
@@ -379,26 +379,26 @@ export default function OnboardingPage() {
     switch (step) {
       case 1:
         return {
-          edition: '03 â€” BASELINE METRICS',
+          edition: '03 — BASELINE METRICS',
           quote: <>Measure the foundation.<br />Every transformation starts here.</>,
           tag: 'BIOMETRIC CALIBRATION, IN SYNC'
         };
       case 2:
         return {
-          edition: '04 â€” PERFORMANCE AMBITIONS',
+          edition: '04 — PERFORMANCE AMBITIONS',
           quote: <>Ambition with clear metrics<br />becomes inevitable progress.</>,
           tag: 'TARGET MATRIX, IN SYNC'
         };
       case 3:
         return {
-          edition: '05 â€” NUTRITIONAL FUEL',
+          edition: '05 — NUTRITIONAL FUEL',
           quote: <>Food is information.<br />Fuel the engine with precision.</>,
           tag: 'DIETARY ALIGNMENT, IN SYNC'
         };
       case 4:
       default:
         return {
-          edition: '06 â€” METABOLIC CADENCE',
+          edition: '06 — METABOLIC CADENCE',
           quote: <>Calculate the output.<br />Harmonize training with daily life.</>,
           tag: 'ENERGY EQUATION, IN SYNC'
         };
@@ -407,14 +407,14 @@ export default function OnboardingPage() {
 
   return (
     <main className="auth-shell">
-      {/* â”€â”€ Left Studio Branding & Dynamic Artwork â”€â”€ */}
+      {/* ── Left Studio Branding & Dynamic Artwork ── */}
       <StudioPanel
         edition={studioCopy.edition}
         quote={studioCopy.quote}
         tag={studioCopy.tag}
       />
 
-      {/* â”€â”€ Right Form / Wizard Panel â”€â”€ */}
+      {/* ── Right Form / Wizard Panel ── */}
       <section className="form-panel onboarding-panel">
         <div className="mobile-brand">
           <Logo />
@@ -470,9 +470,7 @@ export default function OnboardingPage() {
           {/* Wizard Content Container */}
           <div className="wizard-form-container">
 
-            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-                STEP 1: BASELINE BIOMETRICS
-               â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            {/* --- STEP 1: BASELINE BIOMETRICS --- */}
             {step === 1 && (
               <div className="step-view fade-in">
                 <div className="eyebrow"><span /> CALIBRATION &bull; BIOMETRICS</div>
@@ -533,7 +531,7 @@ export default function OnboardingPage() {
                       <span className="unit-label">cm</span>
                     </div>
                     {heightInFtIn && (
-                      <span className="helper-hint">â‰ˆ {heightInFtIn}</span>
+                      <span className="helper-hint">≈ {heightInFtIn}</span>
                     )}
                   </label>
                 </div>
@@ -556,7 +554,7 @@ export default function OnboardingPage() {
                       <span className="unit-label">kg</span>
                     </div>
                     {weightInLbs && (
-                      <span className="helper-hint">â‰ˆ {weightInLbs} lbs</span>
+                      <span className="helper-hint">≈ {weightInLbs} lbs</span>
                     )}
                   </label>
 
@@ -578,9 +576,7 @@ export default function OnboardingPage() {
               </div>
             )}
 
-            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-                STEP 2: AMBITIONS & TARGETS
-               â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            {/* --- STEP 2: AMBITIONS & TARGETS --- */}
             {step === 2 && (
               <div className="step-view fade-in">
                 <div className="eyebrow"><span /> CALIBRATION &bull; AMBITIONS</div>
@@ -635,14 +631,14 @@ export default function OnboardingPage() {
                     <span className="preview-label">TRAJECTORY DELTA</span>
                     <div className="delta-content">
                       {weightDelta === 0 ? (
-                        <span className="delta-pill delta-neutral">âš–ï¸ Weight Maintenance</span>
+                        <span className="delta-pill delta-neutral">⚖️ Weight Maintenance</span>
                       ) : weightDelta < 0 ? (
                         <span className="delta-pill delta-cut">
-                          ðŸ“‰ {Math.abs(weightDelta)} kg Fat Loss Target
+                          📉 {Math.abs(weightDelta)} kg Fat Loss Target
                         </span>
                       ) : (
                         <span className="delta-pill delta-bulk">
-                          ðŸ“ˆ +{weightDelta} kg Muscle Gain Target
+                          📈 +{weightDelta} kg Muscle Gain Target
                         </span>
                       )}
                     </div>
@@ -651,9 +647,7 @@ export default function OnboardingPage() {
               </div>
             )}
 
-            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-                STEP 3: NUTRITIONAL FUEL & DIETARY PREFERENCE
-               â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            {/* --- STEP 3: NUTRITIONAL FUEL & DIETARY PREFERENCE --- */}
             {step === 3 && (
               <div className="step-view fade-in">
                 <div className="eyebrow"><span /> CALIBRATION &bull; NUTRITION</div>
@@ -688,9 +682,7 @@ export default function OnboardingPage() {
               </div>
             )}
 
-            {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-                STEP 4: WEEKLY ACTIVITY & METABOLIC FORECAST
-               â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            {/* --- STEP 4: WEEKLY ACTIVITY & METABOLIC FORECAST --- */}
             {step === 4 && (
               <div className="step-view fade-in">
                 <div className="eyebrow"><span /> CALIBRATION &bull; ACTIVITY &amp; TARGETS</div>
