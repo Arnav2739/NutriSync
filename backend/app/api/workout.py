@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+﻿from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from uuid import UUID
@@ -19,9 +19,9 @@ from app.core.security import get_current_user
 router = APIRouter(tags=["Fitness & Workout Engine"])
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # EXERCISE CATALOG ENDPOINTS (Public / Authenticated)
-# ══════════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 @router.get("/exercises", response_model=List[ExerciseResponse])
 def list_exercises(
@@ -68,9 +68,9 @@ def get_exercise_detail(
     return exercise
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # USER WORKOUT LOGGING & SESSION ENDPOINTS (JWT Protected)
-# ══════════════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 @router.post("/workouts", response_model=WorkoutLogResponse, status_code=status.HTTP_201_CREATED)
 def create_workout_log(
@@ -93,6 +93,25 @@ def create_workout_log(
 
     total_volume = workout_in.total_volume_kg or calculated_volume
 
+    # Auto-calculate calories burned if not explicitly supplied
+    calculated_calories = float(workout_in.calories_burned or 0.0)
+    if calculated_calories <= 0.0:
+        duration_min = 45.0
+        if started_at and completed_at:
+            delta_sec = (completed_at - started_at).total_seconds()
+            if delta_sec > 60:
+                duration_min = delta_sec / 60.0
+
+        user_weight = (
+            current_user.profile.weight_kg
+            if (current_user.profile and current_user.profile.weight_kg)
+            else 70.0
+        )
+        weight_factor = user_weight / 70.0
+        base_metabolic = duration_min * 5.5 * weight_factor
+        mechanical_tonnage = total_volume * 0.04
+        calculated_calories = round(max(35.0, base_metabolic + mechanical_tonnage), 1)
+
     # Create root WorkoutLog session
     workout_log = WorkoutLog(
         id=uuid.uuid4(),
@@ -102,7 +121,7 @@ def create_workout_log(
         started_at=started_at,
         completed_at=completed_at,
         total_volume_kg=total_volume,
-        calories_burned=workout_in.calories_burned or 0.0,
+        calories_burned=calculated_calories,
         notes=workout_in.notes,
         status=workout_in.status,
     )

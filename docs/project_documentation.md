@@ -173,3 +173,19 @@ NutriSync/
 - [Biometrics & Onboarding Architecture Guide](file:///d:/MCA/NutriSync/docs/biometrics_and_onboarding_guide.md) — Mathematical formulas (BMI, Mifflin-St Jeor, TDEE, Macros), API contracts, and ER diagrams.
 - [Fitness & Workout Engine Architecture Guide](file:///d:/MCA/NutriSync/docs/fitness_and_workout_engine_guide.md) — Exercise catalog, JSONB set logging, and workout API contracts.
 - [Why Docker Guide](file:///d:/MCA/NutriSync/docs/why_docker.md) — Explaining containerized PostgreSQL and volume persistence.
+
+### 🚀 Sprint 7: Progress Analytics, Telemetry Visualizations & Dashboard Overhaul (Proposal §6.8)
+- **Historical Charting via Recharts**:
+  - Integrated interactive Recharts visualizations: **Volume Progression Tonnage AreaChart**, **Weekly Workout Consistency BarChart** (with $4	ext{ sessions/week}$ target baseline), and **Caloric Expenditure AreaChart**.
+  - Engineered custom dark athletic tooltips (`CustomTooltip`) featuring session titles, timestamps, and metric units.
+  - Implemented view switcher tabs, KPI summary cards (Total Volume Lifted, Total Sessions, Avg Session Intensity, Total Energy Burned), and an adaptive empty state with a direct CTA to launch training.
+- **Backend Analytics API (`GET /api/v1/progress/stats`)**:
+  - Aggregates user workouts into chronological volume curves, weekly ISO frequency distributions, and metabolic expenditure trends.
+  - Automatic caloric expenditure computation & legacy database backfill based on session duration, volume tonnage, and athlete body weight.
+- **Focus Mode Live Calorie HUD**:
+  - Added live metabolic burn calculation to the active workout HUD (`EST. BURN: XX kcal`) and End Session modal, persisting energy expenditure to PostgreSQL.
+- **Dashboard Usability & Aesthetics Overhaul**:
+  - **Fixed Viewport Scroll Lock**: Removed legacy global `overflow: hidden` on `#root` and `html, body`, restoring natural, smooth scrolling.
+  - **Screen Utilization**: Expanded dashboard workspace from cramped $1040	ext{px}$ to $1360	ext{px}$, eliminating excessive margins and the need to zoom out.
+  - **Top Executive 4-Card HUD Ribbon**: Glanceable metrics for Daily Caloric Target, Weight Trajectory, BMI, and Cumulative Training Volume.
+  - **Asymmetric 2-Column Architecture**: Left column for Macro Engine & Progress Charts; right column for Elevated Workout Launch CTA, Biometric Matrix, and an interactive **Color-Coded Visual BMI Gauge**.

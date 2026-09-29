@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import auth, profile, workout
+from app.api import auth, profile, workout, progress
 
 app = FastAPI(
     title="NutriSync API",
@@ -32,4 +32,4 @@ def health_check():
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(profile.router, prefix="/api/v1")
 app.include_router(workout.router, prefix="/api/v1")
-
+app.include_router(progress.router, prefix="/api/v1")

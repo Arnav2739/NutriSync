@@ -1,3 +1,4 @@
+import api from '../services/api';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -198,6 +199,8 @@ export default function ActiveWorkout() {
         routine_tag: routineTag || undefined,
         started_at: startTimeRef.current.toISOString(),
         completed_at: new Date().toISOString(),
+        total_volume_kg: liveVolume,
+        calories_burned: liveCalories,
         notes: sessionNotes || undefined,
         status: 'completed',
         exercise_logs: exerciseLogs,
@@ -251,6 +254,10 @@ export default function ActiveWorkout() {
           <div className="wh-stat sets">
             <span>SETS</span>
             <strong>{completedSetsCount} <small>/ {totalSetsCount}</small></strong>
+          </div>
+          <div className="wh-stat calories">
+            <span>EST. BURN</span>
+            <strong>{liveCalories} <small>kcal</small></strong>
           </div>
         </div>
 
@@ -526,6 +533,10 @@ export default function ActiveWorkout() {
               <div className="end-stat">
                 <span>SETS DONE</span>
                 <strong>{completedSetsCount} / {totalSetsCount}</strong>
+              </div>
+              <div className="end-stat">
+                <span>EST. BURN</span>
+                <strong>{liveCalories} kcal</strong>
               </div>
             </div>
             <div className="end-actions">
