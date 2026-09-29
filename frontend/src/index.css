@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    Fonts
    ============================================ */
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap');
@@ -3868,3 +3868,1841 @@ input[type="text"] {
     font-size: 28px;
   }
 }
+
+/* ========================================================
+   SMART GROCERY & DIET PLANNER (SPRINT C / PROPOSAL §6.3–§6.5)
+   ======================================================== */
+
+.diet-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 999;
+  background: #132720;
+  border: 1px solid #cbed3e;
+  color: #eaf3e9;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 13px Manrope, sans-serif;
+  animation: slide-in-top 0.25s ease-out;
+}
+
+@keyframes slide-in-top {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.diet-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.03);
+}
+
+.diet-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font: 600 13px Manrope, sans-serif;
+  color: #55675c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diet-tab-btn:hover {
+  color: #14221b;
+  background: #f0f4ee;
+}
+
+.diet-tab-btn.active {
+  background: #132720;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.15);
+}
+
+.diet-tab-count {
+  font: 600 11px "DM Mono", monospace;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: #ebf2e9;
+  color: #244433;
+}
+
+.diet-tab-btn.active .diet-tab-count {
+  background: rgba(203, 237, 62, 0.2);
+  color: #cbed3e;
+}
+
+.diet-tab-alert-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+  animation: pulse-dot 1.5s infinite;
+}
+
+.diet-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 1-Tap Quick-Add Staples Shelf */
+.staples-box {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+}
+
+.staples-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.staples-box-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 12px "DM Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #132720;
+}
+
+.staples-box-sub {
+  font-size: 12px;
+  color: #6a7e71;
+}
+
+.staples-cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.staples-cat-btn {
+  background: #f4f7f2;
+  border: 1px solid #d8e2d7;
+  color: #55675c;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font: 500 11px "DM Mono", monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.staples-cat-btn:hover {
+  background: #e9f0e6;
+  color: #14221b;
+}
+
+.staples-cat-btn.active {
+  background: #132720;
+  border-color: #132720;
+  color: #cbed3e;
+  font-weight: 700;
+}
+
+.staples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.staple-card {
+  background: #fbfcfa;
+  border: 1px solid #e1e9e0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.staple-card:hover {
+  background: #ffffff;
+  border-color: #b8d960;
+  box-shadow: 0 4px 12px rgba(19, 39, 32, 0.06);
+  transform: translateY(-1px);
+}
+
+.staple-card:active {
+  transform: scale(0.98);
+}
+
+.staple-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.staple-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.staple-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.staple-name {
+  font: 600 13px Manrope, sans-serif;
+  color: #14221b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.staple-qty {
+  font: 11px "DM Mono", monospace;
+  color: #6a7e71;
+}
+
+.staple-add-action {
+  background: #eaf3e7;
+  border: 1px solid #c7dec3;
+  color: #1b4e2d;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.staple-card:hover .staple-add-action {
+  background: #cbed3e;
+  border-color: #cbed3e;
+  color: #132720;
+}
+
+/* Pantry Toolbar & Filters */
+.pantry-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pantry-cat-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pantry-cat-btn {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  color: #55675c;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font: 600 12px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pantry-cat-btn:hover {
+  background: #f4f7f2;
+  color: #14221b;
+}
+
+.pantry-cat-btn.active {
+  background: #132720;
+  border-color: #132720;
+  color: #ffffff;
+}
+
+.pantry-clear-btn {
+  background: transparent;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font: 600 12px "DM Mono", monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pantry-clear-btn:hover {
+  background: #fee2e2;
+}
+
+/* Empty State */
+.pantry-empty-card {
+  background: #ffffff;
+  border: 1.5px dashed #c8d8c6;
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+}
+
+.pantry-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #edf5eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.pantry-empty-title {
+  font: 400 24px "Libre Baskerville", serif;
+  color: #14221b;
+  margin: 0;
+}
+
+.pantry-empty-desc {
+  font: 14px Manrope, sans-serif;
+  color: #55675c;
+  max-width: 480px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pantry-kit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #cbed3e;
+  color: #132720;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 22px;
+  font: 700 13px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(203, 237, 62, 0.3);
+  margin-top: 6px;
+}
+
+.pantry-kit-btn:hover {
+  background: #d8f55b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(203, 237, 62, 0.4);
+}
+
+/* Pantry Item Grid & Cards */
+.pantry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+
+.pantry-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.03);
+  transition: all 0.2s ease;
+}
+
+.pantry-card:hover {
+  border-color: #b8d960;
+  box-shadow: 0 6px 18px rgba(19, 39, 32, 0.08);
+  transform: translateY(-1px);
+}
+
+.pantry-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.pantry-cat-badge {
+  font: 600 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #f0f5ee;
+  color: #375745;
+}
+
+.pantry-card-title {
+  font: 600 17px Manrope, sans-serif;
+  color: #14221b;
+  margin: 6px 0 0;
+}
+
+.pantry-del-btn {
+  background: transparent;
+  border: none;
+  color: #9ab0a2;
+  cursor: pointer;
+  padding: 4px 6px;
+  font-size: 14px;
+  transition: color 0.15s ease;
+}
+
+.pantry-del-btn:hover {
+  color: #dc2626;
+}
+
+.pantry-macro-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  background: #f7f9f5;
+  border: 1px solid #e9f0e6;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.pantry-macro-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.pantry-macro-lbl {
+  font: 9px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #718578;
+}
+
+.pantry-macro-val {
+  font: 700 13px "DM Mono", monospace;
+  color: #14221b;
+}
+
+.pantry-macro-val.protein {
+  color: #1b7a3a;
+}
+
+.pantry-macro-val.carbs {
+  color: #0284c7;
+}
+
+.pantry-macro-val.fats {
+  color: #d97706;
+}
+
+.pantry-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #edf2eb;
+  padding-top: 12px;
+}
+
+.pantry-qty-lbl {
+  font: 11px "DM Mono", monospace;
+  color: #6a7e71;
+}
+
+.pantry-qty-ctrls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pantry-qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #d8e2d7;
+  background: #ffffff;
+  color: #14221b;
+  font: 700 13px Manrope, sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.pantry-qty-btn:hover {
+  background: #132720;
+  border-color: #132720;
+  color: #cbed3e;
+}
+
+.pantry-qty-num {
+  font: 700 13px "DM Mono", monospace;
+  color: #14221b;
+  min-width: 70px;
+  text-align: center;
+}
+
+/* TAB 2: DEFICIENCY ANALYSIS (PROPOSAL §6.4) */
+.deficiency-callout {
+  background: linear-gradient(135deg, #132720 0%, #1c3b2e 100%);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(19, 39, 32, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deficiency-callout-tag {
+  font: 700 11px "DM Mono", monospace;
+  letter-spacing: 0.12em;
+  color: #cbed3e;
+  text-transform: uppercase;
+}
+
+.deficiency-callout h3 {
+  font: 400 22px "Libre Baskerville", serif;
+  color: #ffffff;
+  margin: 0;
+}
+
+.deficiency-callout p {
+  font: 14px Manrope, sans-serif;
+  color: #d2e2d6;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0;
+}
+
+.macro-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.macro-compare-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.macro-compare-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.macro-compare-lbl {
+  font: 700 11px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #55675c;
+}
+
+.macro-compare-target {
+  font: 11px "DM Mono", monospace;
+  color: #7a8e81;
+}
+
+.macro-compare-val {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.macro-compare-val strong {
+  font: 700 26px "DM Mono", monospace;
+  color: #14221b;
+}
+
+.macro-compare-val span {
+  font: 12px "DM Mono", monospace;
+  color: #6a7e71;
+}
+
+.macro-compare-track {
+  width: 100%;
+  height: 6px;
+  background: #e8efe6;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.macro-compare-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s ease-out;
+}
+
+.macro-compare-bar.protein { background: #16a34a; }
+.macro-compare-bar.calories { background: #132720; }
+.macro-compare-bar.carbs { background: #0284c7; }
+.macro-compare-bar.fats { background: #d97706; }
+
+.macro-compare-sub {
+  font: 11px "DM Mono", monospace;
+  color: #6a7e71;
+}
+
+.deficiency-findings-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+}
+
+.deficiency-card-title {
+  font: 600 17px Manrope, sans-serif;
+  color: #14221b;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deficiency-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deficiency-finding-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: 1px solid #d8e2d7;
+  background: #fbfcf9;
+  flex-wrap: wrap;
+}
+
+.deficiency-finding-item.optimal {
+  background: #f4faf3;
+  border-color: #c4e4c2;
+}
+
+.deficiency-finding-item.warning {
+  background: #fef8f6;
+  border-color: #fed7cc;
+}
+
+.finding-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.finding-icon {
+  font-size: 20px;
+}
+
+.finding-nutrient {
+  font: 700 12px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #14221b;
+}
+
+.finding-msg {
+  font: 13px Manrope, sans-serif;
+  color: #43554b;
+  margin: 2px 0 0;
+}
+
+.finding-gap-tag {
+  font: 700 11px "DM Mono", monospace;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  white-space: nowrap;
+}
+
+/* Suggested Additions */
+.sug-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.sug-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.02);
+  transition: all 0.2s ease;
+}
+
+.sug-card:hover {
+  border-color: #b8d960;
+  box-shadow: 0 6px 16px rgba(19, 39, 32, 0.06);
+  transform: translateY(-1px);
+}
+
+.sug-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sug-cat-tag {
+  font: 600 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eef4ec;
+  color: #2b533a;
+}
+
+.sug-qty-tag {
+  font: 600 11px "DM Mono", monospace;
+  color: #55675c;
+}
+
+.sug-title {
+  font: 600 16px Manrope, sans-serif;
+  color: #14221b;
+  margin: 6px 0 4px;
+}
+
+.sug-reason {
+  font: 13px Manrope, sans-serif;
+  color: #55675c;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sug-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #edf2eb;
+  padding-top: 12px;
+}
+
+.sug-protein-tag {
+  font: 700 12px "DM Mono", monospace;
+  color: #15803d;
+}
+
+.sug-add-btn {
+  background: #132720;
+  color: #cbed3e;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font: 600 12px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sug-add-btn:hover {
+  background: #1e3f32;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.2);
+}
+
+/* TAB 3: SMART MEAL PLAN GENERATOR (PROPOSAL §6.3) */
+.mealplan-action-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 4px 16px rgba(19, 39, 32, 0.04);
+  flex-wrap: wrap;
+}
+
+.mealplan-action-text {
+  max-width: 650px;
+}
+
+.mealplan-badge {
+  font: 700 11px "DM Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1b633a;
+  background: #eaf5e7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.mealplan-h {
+  font: 400 24px "Libre Baskerville", serif;
+  color: #14221b;
+  margin: 0 0 6px;
+}
+
+.mealplan-desc {
+  font: 14px Manrope, sans-serif;
+  color: #55675c;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mealplan-gen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #cbed3e;
+  color: #132720;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 26px;
+  font: 700 14px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(203, 237, 62, 0.3);
+  white-space: nowrap;
+}
+
+.mealplan-gen-btn:hover:not(:disabled) {
+  background: #d8f55b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(203, 237, 62, 0.4);
+}
+
+.mealplan-gen-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mealplan-summary-bar {
+  background: #132720;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(19, 39, 32, 0.1);
+}
+
+.mealplan-sum-title {
+  font: 400 18px "Libre Baskerville", serif;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mealplan-sum-msg {
+  font: 12px "DM Mono", monospace;
+  color: #cbed3e;
+  margin: 4px 0 0;
+}
+
+.mealplan-sum-stats {
+  display: flex;
+  gap: 20px;
+  font: 13px "DM Mono", monospace;
+}
+
+.mealplan-sum-stats strong {
+  color: #cbed3e;
+}
+
+.meals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.meal-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.03);
+  transition: all 0.2s ease;
+}
+
+.meal-card:hover {
+  border-color: #b8d960;
+  box-shadow: 0 8px 20px rgba(19, 39, 32, 0.07);
+}
+
+.meal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meal-badge {
+  font: 700 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #132720;
+  color: #cbed3e;
+}
+
+.meal-coverage-pill {
+  font: 600 11px "DM Mono", monospace;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: #edf5eb;
+  color: #1b5e34;
+}
+
+.meal-title {
+  font: 400 19px "Libre Baskerville", serif;
+  color: #14221b;
+  margin: 6px 0 4px;
+}
+
+.meal-ingredients-italic {
+  font: italic 13px Manrope, sans-serif;
+  color: #55675c;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.meal-recipe-box {
+  background: #f7f9f5;
+  border-left: 3px solid #132720;
+  border-radius: 0 6px 6px 0;
+  padding: 12px 14px;
+  font: 13px Manrope, sans-serif;
+  color: #314439;
+  line-height: 1.5;
+}
+
+.meal-recipe-box strong {
+  display: block;
+  font: 700 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #6a7e71;
+  margin-bottom: 4px;
+}
+
+.meal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #edf2eb;
+  padding-top: 14px;
+  font: 12px "DM Mono", monospace;
+}
+
+.meal-prep-time {
+  color: #6a7e71;
+}
+
+.meal-macro-badges {
+  display: flex;
+  gap: 10px;
+}
+
+.meal-macro-badges strong {
+  color: #14221b;
+}
+
+.meal-macro-badges .p-val { color: #16a34a; }
+.meal-macro-badges .c-val { color: #0284c7; }
+.meal-macro-badges .f-val { color: #d97706; }
+
+.meal-unlock-shelf {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+}
+
+.meal-unlock-title {
+  font: 600 15px Manrope, sans-serif;
+  color: #14221b;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meal-unlock-desc {
+  font: 13px Manrope, sans-serif;
+  color: #55675c;
+  margin: 0 0 14px;
+}
+
+.meal-unlock-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meal-unlock-btn {
+  background: #f4f7f2;
+  border: 1px solid #d8e2d7;
+  color: #14221b;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font: 600 12px "DM Mono", monospace;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.meal-unlock-btn:hover {
+  background: #132720;
+  border-color: #132720;
+  color: #cbed3e;
+}
+
+/* TAB 4: SHOPPING LIST (PROPOSAL §6.5) */
+.shopping-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.shopping-add-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.03);
+}
+
+.shopping-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shop-input-text {
+  flex: 1;
+  min-width: 220px;
+  background: #fbfcf9;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font: 14px Manrope, sans-serif;
+  color: #14221b;
+  outline: none;
+}
+
+.shop-input-text:focus {
+  border-color: #132720;
+}
+
+.shop-input-num {
+  width: 90px;
+  background: #fbfcf9;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font: 700 13px "DM Mono", monospace;
+  color: #14221b;
+  text-align: center;
+  outline: none;
+}
+
+.shop-select {
+  background: #fbfcf9;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font: 600 12px "DM Mono", monospace;
+  color: #14221b;
+  outline: none;
+}
+
+.shop-submit-btn {
+  background: #132720;
+  color: #cbed3e;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font: 700 13px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.shop-submit-btn:hover {
+  background: #1c3b2e;
+}
+
+.shopping-item-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.02);
+  transition: all 0.15s ease;
+}
+
+.shopping-item-card.purchased {
+  background: #f9faf8;
+  opacity: 0.6;
+}
+
+.shop-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shop-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #132720;
+  cursor: pointer;
+}
+
+.shop-item-name {
+  font: 600 15px Manrope, sans-serif;
+  color: #14221b;
+  margin: 0;
+}
+
+.shop-item-card.purchased .shop-item-name {
+  text-decoration: line-through;
+  color: #718578;
+}
+
+.shop-item-meta {
+  font: 11px "DM Mono", monospace;
+  color: #6a7e71;
+  display: flex;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.shop-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shop-transfer-btn {
+  background: #eaf5e7;
+  border: 1px solid #c8e4c2;
+  color: #17542d;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font: 600 11px "DM Mono", monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shop-transfer-btn:hover {
+  background: #132720;
+  border-color: #132720;
+  color: #cbed3e;
+}
+
+.shop-del-btn {
+  background: transparent;
+  border: none;
+  color: #9ab0a2;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.shop-del-btn:hover {
+  color: #dc2626;
+}
+
+/* Modal Dialog */
+.diet-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 39, 32, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.diet-modal-box {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 16px;
+  padding: 0;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow: hidden; /* Clips all 4 corners to 16px radius, eliminating any rectangular edge */
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #edf2eb;
+  padding: 22px 28px 16px 28px;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.diet-modal-title {
+  font: 400 20px "Libre Baskerville", serif;
+  color: #14221b;
+  margin: 0;
+}
+
+.diet-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #718578;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.diet-modal-close:hover {
+  color: #14221b;
+  background: #f4f7f2;
+}
+
+.diet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding: 20px 28px 26px 28px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #c2d1c5 transparent;
+}
+
+/* Luxury sleek scrollbar without square Windows track/arrows */
+.diet-form::-webkit-scrollbar,
+.diet-modal-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.diet-form::-webkit-scrollbar-track,
+.diet-modal-box::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.diet-form::-webkit-scrollbar-thumb,
+.diet-modal-box::-webkit-scrollbar-thumb {
+  background: #c2d1c5;
+  border-radius: 99px;
+}
+
+.diet-form::-webkit-scrollbar-thumb:hover,
+.diet-modal-box::-webkit-scrollbar-thumb:hover {
+  background: #98aba0;
+}
+
+.diet-form-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.diet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 0%;
+  min-width: 0; /* Ensures flex children shrink properly without overflow */
+}
+
+.diet-label {
+  font: 700 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #55675c;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.window-segment-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.window-segment-btn {
+  background: #fbfcf9;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font: 600 12px Manrope, sans-serif;
+  color: #55675c;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.window-segment-btn:hover {
+  background: #f4f8f2;
+  border-color: #b8d960;
+}
+
+.window-segment-btn.active {
+  background: #132720;
+  border-color: #132720;
+  color: #cbed3e;
+  font-weight: 700;
+}
+
+.window-segment-btn .sub-text {
+  font: 10px "DM Mono", monospace;
+  opacity: 0.8;
+}
+
+.diet-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #fbfcf9;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 9px 12px;
+  height: 42px;
+  font: 14px Manrope, sans-serif;
+  color: #14221b;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.diet-input:focus {
+  border-color: #132720;
+  box-shadow: 0 0 0 2px rgba(19, 39, 32, 0.1);
+}
+
+.diet-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #edf2eb;
+  padding-top: 16px;
+}
+
+.diet-btn-cancel {
+  background: transparent;
+  border: 1px solid #d8e2d7;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font: 600 13px Manrope, sans-serif;
+  color: #55675c;
+  cursor: pointer;
+}
+
+.diet-btn-cancel:hover {
+  background: #f4f7f2;
+  color: #14221b;
+}
+
+.diet-btn-submit {
+  background: #132720;
+  color: #cbed3e;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 20px;
+  font: 700 13px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.diet-btn-submit:hover {
+  background: #1c3b2e;
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .macro-compare-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .macro-compare-grid {
+    grid-template-columns: 1fr;
+  }
+  .diet-tab-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .diet-tab-btn {
+    justify-content: center;
+  }
+}
+
+/* ========================================================
+   CHEAT MEAL TRACKER & ADAPTIVE BALANCER (PROPOSAL §6.6 & §6.7)
+   ======================================================== */
+
+.rebalance-active-banner {
+  background: linear-gradient(135deg, #132720 0%, #1a382b 100%);
+  border: 1.5px solid rgba(203, 237, 62, 0.4);
+  border-radius: 10px;
+  padding: 26px 30px;
+  color: #ffffff;
+  box-shadow: 0 8px 30px rgba(19, 39, 32, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rebalance-banner-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rebalance-banner-badge {
+  font: 700 11px "DM Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #132720;
+  background: #cbed3e;
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rebalance-banner-h {
+  font: 400 24px "Libre Baskerville", serif;
+  color: #ffffff;
+  margin: 6px 0 2px;
+}
+
+.rebalance-banner-sub {
+  font: 13px Manrope, sans-serif;
+  color: #cde0d2;
+}
+
+.rebalance-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.rebalance-target-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rebalance-target-lbl {
+  font: 700 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #a4bea9;
+}
+
+.rebalance-target-val {
+  font: 700 22px "DM Mono", monospace;
+  color: #cbed3e;
+}
+
+.rebalance-target-sub {
+  font: 11px Manrope, sans-serif;
+  color: #9cb5a3;
+}
+
+.rebalance-explanation-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #cbed3e;
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font: 13px Manrope, sans-serif;
+  color: #d8e6db;
+  line-height: 1.5;
+}
+
+.rebalance-glycogen-box {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font: 13px Manrope, sans-serif;
+  color: #fef3c7;
+  line-height: 1.5;
+}
+
+.rebalance-complete-btn {
+  align-self: flex-start;
+  background: #cbed3e;
+  color: #132720;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font: 700 13px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(203, 237, 62, 0.3);
+}
+
+.rebalance-complete-btn:hover {
+  background: #d8f55b;
+  transform: translateY(-1px);
+}
+
+/* Quick-Log Food Templates */
+.cheat-shelf-box {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 10px rgba(19, 39, 32, 0.02);
+}
+
+.cheat-shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cheat-shelf-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 12px "DM Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #132720;
+}
+
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.cheat-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.02);
+  transition: all 0.2s ease;
+}
+
+.cheat-card:hover {
+  border-color: #b8d960;
+  box-shadow: 0 6px 18px rgba(19, 39, 32, 0.07);
+  transform: translateY(-1px);
+}
+
+.cheat-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cheat-icon-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cheat-card-icon {
+  font-size: 26px;
+}
+
+.cheat-card-name {
+  font: 600 16px Manrope, sans-serif;
+  color: #14221b;
+  margin: 0;
+}
+
+.cheat-card-cat {
+  font: 600 10px "DM Mono", monospace;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #f0f5ee;
+  color: #375745;
+}
+
+.cheat-card-desc {
+  font: 13px Manrope, sans-serif;
+  color: #6a7e71;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.cheat-card-macros {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  background: #f7f9f5;
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+
+.cheat-macro-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cheat-macro-lbl {
+  font: 9px "DM Mono", monospace;
+  text-transform: uppercase;
+  color: #718578;
+}
+
+.cheat-macro-val {
+  font: 700 13px "DM Mono", monospace;
+  color: #14221b;
+}
+
+.cheat-log-btn {
+  background: #132720;
+  color: #cbed3e;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font: 600 13px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cheat-log-btn:hover {
+  background: #1e3f32;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.2);
+}
+
+/* History List */
+.cheat-history-card {
+  background: #ffffff;
+  border: 1px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(19, 39, 32, 0.02);
+  transition: all 0.15s ease;
+}
+
+.cheat-history-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cheat-history-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f4f8f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.cheat-history-title {
+  font: 600 16px Manrope, sans-serif;
+  color: #14221b;
+  margin: 0;
+}
+
+.cheat-history-meta {
+  font: 11px "DM Mono", monospace;
+  color: #6a7e71;
+  display: flex;
+  gap: 8px;
+  margin-top: 3px;
+  align-items: center;
+}
+
+.cheat-feeling-badge {
+  background: #fbf5e6;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font: 11px Manrope, sans-serif;
+}
+
+.cheat-history-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cheat-history-cals {
+  font: 700 16px "DM Mono", monospace;
+  color: #14221b;
+  text-align: right;
+}
+
+/* Strategy Selector inside Modal */
+.strategy-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.strategy-option {
+  border: 1.5px solid #d8e2d7;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #fcfdfa;
+}
+
+.strategy-option:hover {
+  background: #f4f8f2;
+}
+
+.strategy-option.selected {
+  border-color: #132720;
+  background: #f0f6ee;
+}
+
+.strategy-title {
+  font: 600 14px Manrope, sans-serif;
+  color: #14221b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.strategy-desc {
+  font: 12px Manrope, sans-serif;
+  color: #55675c;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.feeling-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.feeling-chip {
+  background: #f4f7f2;
+  border: 1px solid #d8e2d7;
+  color: #55675c;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font: 12px Manrope, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.feeling-chip.active {
+  background: #132720;
+  color: #cbed3e;
+  border-color: #132720;
+  font-weight: 600;
+}
+
+

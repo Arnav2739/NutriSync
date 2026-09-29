@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from uuid import UUID
@@ -13,6 +13,14 @@ from app.schemas.workout import (
     WorkoutLogCreate,
     WorkoutLogUpdate,
     WorkoutLogResponse,
+)
+from app.schemas.workout_recommendation import (
+    RecommendedRoutineResponse,
+    RoutineOptionSummary,
+)
+from app.services.workout_recommender import (
+    get_available_splits,
+    generate_recommended_routine,
 )
 from app.core.security import get_current_user
 
@@ -183,6 +191,36 @@ def list_user_workouts(
     return workouts
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# PERSONALIZED WORKOUT RECOMMENDATION ENGINE (Proposal §6.2)
+# ══════════════════════════════════════════════════════════════════════════════
+
+@router.get("/workouts/recommendations/splits", response_model=List[RoutineOptionSummary])
+def list_recommendation_splits():
+    """
+    Retrieve available training splits supported by the recommendation engine.
+    """
+    return get_available_splits()
+
+
+@router.get("/workouts/recommendations", response_model=RecommendedRoutineResponse)
+def get_personalized_recommendation(
+    split: Optional[str] = Query("auto", description="Target split (push, pull, legs, full_body, metabolic_hiit, auto)"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Generate a personalized workout routine calibrated for the user's primary goal,
+    biometrics, and training split.
+    """
+    return generate_recommended_routine(
+        split_key=split,
+        user_id=current_user.id,
+        profile=current_user.profile,
+        db=db,
+    )
+
+
 @router.get("/workouts/{workout_id}", response_model=WorkoutLogResponse)
 def get_workout_log(
     workout_id: UUID,
@@ -230,3 +268,5 @@ def delete_workout_log(
     db.delete(workout)
     db.commit()
     return None
+
+

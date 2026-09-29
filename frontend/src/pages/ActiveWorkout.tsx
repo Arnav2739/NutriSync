@@ -1,6 +1,6 @@
 import api from '../services/api';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   fetchExercises,
   submitWorkout,
@@ -8,6 +8,10 @@ import {
   type SetDetail,
   type WorkoutExerciseLogCreate,
 } from '../services/workout';
+import {
+  recommendationService,
+  RecommendedRoutineResponse,
+} from '../services/recommendation';
 
 // ═══════════════════════════════════════════════════════════════
 // Internal Types
@@ -45,6 +49,7 @@ const MUSCLE_GROUPS = ['All', 'Chest', 'Back', 'Quads', 'Hamstrings', 'Shoulders
 
 export default function ActiveWorkout() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Session state
   const [sessionTitle, setSessionTitle] = useState('Workout Session');
@@ -52,6 +57,12 @@ export default function ActiveWorkout() {
   const [selectedExercises, setSelectedExercises] = useState<ActiveExercise[]>([]);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [sessionNotes, setSessionNotes] = useState('');
+
+  // AI Recommendation modal & preview state
+  const [showRecModal, setShowRecModal] = useState<boolean>(false);
+  const [recSplit, setRecSplit] = useState<string>('auto');
+  const [previewRoutine, setPreviewRoutine] = useState<RecommendedRoutineResponse | null>(null);
+  const [recLoading, setRecLoading] = useState<boolean>(false);
 
   // Timer
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -113,6 +124,72 @@ export default function ActiveWorkout() {
     completedSetsCount > 0 ? 15 : 0,
     Math.round(((elapsedSeconds / 60) * 5.5 * (userWeight / 70)) + (liveVolume * 0.04))
   );
+
+  // ── Load Recommended Routine (Proposal §6.2) ──
+  const loadRecommendedRoutine = useCallback(async (splitKey: string = 'auto') => {
+    setRecLoading(true);
+    try {
+      const rec = await recommendationService.getRecommendation(splitKey);
+      setSessionTitle(rec.routine_title);
+      setRoutineTag(rec.split_category.toUpperCase());
+      setSessionNotes(rec.coaching_summary);
+
+      const activeList: ActiveExercise[] = rec.exercises.map(ex => ({
+        exercise: {
+          id: ex.exercise_id,
+          name: ex.name,
+          category: ex.category,
+          primary_muscle: ex.primary_muscle,
+          secondary_muscles: [],
+          equipment: ex.equipment,
+          difficulty: ex.difficulty,
+          instructions: [ex.coaching_cue],
+          gif_url: ex.gif_url || null,
+          calories_per_minute_est: 6.0,
+        },
+        sets: Array.from({ length: ex.target_sets }, (_, i) => ({
+          set_number: i + 1,
+          reps: ex.target_reps,
+          weight_kg: ex.suggested_weight_kg,
+          completed: false,
+        })),
+        target_rest_seconds: ex.target_rest_seconds,
+      }));
+
+      setSelectedExercises(activeList);
+      setShowRecModal(false);
+    } catch (err) {
+      console.error('Failed to load recommendation:', err);
+    } finally {
+      setRecLoading(false);
+    }
+  }, []);
+
+  const fetchPreview = useCallback(async (splitKey: string) => {
+    setRecLoading(true);
+    try {
+      const rec = await recommendationService.getRecommendation(splitKey);
+      setPreviewRoutine(rec);
+    } catch (err) {
+      console.error('Failed to preview recommendation:', err);
+    } finally {
+      setRecLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (showRecModal) {
+      fetchPreview(recSplit);
+    }
+  }, [showRecModal, recSplit, fetchPreview]);
+
+  // URL Query Param handler: /workouts/active?routine=push
+  useEffect(() => {
+    const routineParam = searchParams.get('routine');
+    if (routineParam) {
+      loadRecommendedRoutine(routineParam);
+    }
+  }, [searchParams, loadRecommendedRoutine]);
 
   // ── Load Exercise Catalog ──
   const loadCatalog = useCallback(async () => {
@@ -320,10 +397,20 @@ export default function ActiveWorkout() {
             </div>
           )}
 
-          <button type="button" className="bp-add-btn" onClick={() => setPickerOpen(true)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
-            Add Exercise
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+            <button
+              type="button"
+              className="bp-add-btn"
+              onClick={() => setShowRecModal(true)}
+              style={{ background: '#1c362b', color: '#cbed3e', borderColor: '#2e5242' }}
+            >
+              ✨ AI Routine Generator
+            </button>
+            <button type="button" className="bp-add-btn" onClick={() => setPickerOpen(true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add Exercise
+            </button>
+          </div>
         </aside>
 
         {/* ── ACTION ZONE ── */}
@@ -334,11 +421,25 @@ export default function ActiveWorkout() {
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6.5 6.5h11M12 3v3M4 12h2m12 0h2M6.5 17.5h11M12 18v3M7 12a5 5 0 0110 0"/></svg>
               </div>
               <h2>Ready to Train</h2>
-              <p>Build your routine by adding exercises from the master catalog.</p>
-              <button type="button" className="az-start-btn" onClick={() => setPickerOpen(true)}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
-                Browse Exercise Catalog
-              </button>
+              <p>Build your routine by adding exercises from the master catalog, or generate a tailored daily routine calibrated for your primary goal.</p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <button
+                  type="button"
+                  className="az-start-btn"
+                  onClick={() => setShowRecModal(true)}
+                  disabled={recLoading}
+                >
+                  ✨ AI Recommended Routine
+                </button>
+                <button
+                  type="button"
+                  className="az-start-btn"
+                  style={{ background: 'transparent', border: '1px solid #d8e2d7', color: '#14221b' }}
+                  onClick={() => setPickerOpen(true)}
+                >
+                  Browse Catalog
+                </button>
+              </div>
             </div>
           ) : (
             <div className="az-cards">
@@ -561,6 +662,152 @@ export default function ActiveWorkout() {
               <button type="button" className="end-submit" onClick={handleEndSession} disabled={submitting}>
                 {submitting ? 'Saving...' : 'Complete & Save'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── AI WORKOUT RECOMMENDATION MODAL (Proposal §6.2) ── */}
+      {showRecModal && (
+        <div className="diet-modal-overlay">
+          <div className="diet-modal-box" style={{ maxWidth: 580 }}>
+            <div className="diet-modal-header">
+              <div>
+                <h3 className="diet-modal-title">AI Routine Generator</h3>
+                <span style={{ font: '11px "DM Mono", monospace', color: '#6a7e71', display: 'block', marginTop: 2 }}>
+                  CLINICALLY CALIBRATED TRAINING BLUEPRINT &bull; PROPOSAL §6.2
+                </span>
+              </div>
+              <button onClick={() => setShowRecModal(false)} className="diet-modal-close">
+                ✕
+              </button>
+            </div>
+
+            <div className="diet-form" style={{ padding: '16px 24px 24px 24px' }}>
+              {/* Split Category Selector */}
+              <div className="diet-field">
+                <label className="diet-label">Select Target Training Split</label>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                  {[
+                    { key: 'auto', label: '⚡ Daily Auto Pick', sub: 'Rotates Based on History' },
+                    { key: 'push', label: '💥 Push Protocol', sub: 'Chest, Delts, Triceps' },
+                    { key: 'pull', label: '⚡ Pull Protocol', sub: 'Back, Traps, Biceps' },
+                    { key: 'legs', label: '🦵 Legs & Core', sub: 'Quads, Hams, Glutes' },
+                    { key: 'full_body', label: '🔥 Full Body Surge', sub: 'Compound Athletic' },
+                    { key: 'metabolic_hiit', label: '⚡ Metabolic Blitz', sub: 'Conditioning & Core' },
+                  ].map(s => (
+                    <button
+                      key={s.key}
+                      type="button"
+                      onClick={() => setRecSplit(s.key)}
+                      style={{
+                        background: recSplit === s.key ? '#132720' : '#fbfcf9',
+                        color: recSplit === s.key ? '#cbed3e' : '#14221b',
+                        border: `1px solid ${recSplit === s.key ? '#132720' : '#d8e2d7'}`,
+                        borderRadius: 8,
+                        padding: '8px 10px',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      <strong style={{ fontSize: 12, display: 'block' }}>{s.label}</strong>
+                      <span style={{ fontSize: 10, opacity: 0.75, fontFamily: 'DM Mono, monospace' }}>{s.sub}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Routine Preview */}
+              {recLoading ? (
+                <div style={{ padding: 32, textAlign: 'center', color: '#55675c', font: '13px "DM Mono", monospace' }}>
+                  Calibrating biometric routine...
+                </div>
+              ) : previewRoutine ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  {/* Routine Header Card */}
+                  <div style={{ background: '#f4f7f2', border: '1px solid #d8e2d7', borderRadius: 8, padding: '12px 16px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <h4 style={{ margin: 0, font: '600 15px Manrope, sans-serif', color: '#14221b' }}>
+                          {previewRoutine.routine_title}
+                        </h4>
+                        <span style={{ font: '11px "DM Mono", monospace', color: '#2d6a4f', display: 'block', marginTop: 2 }}>
+                          {previewRoutine.goal_alignment_badge}
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ font: '700 14px "DM Mono", monospace', color: '#14221b', display: 'block' }}>
+                          ~{previewRoutine.estimated_calories_burned} kcal
+                        </span>
+                        <span style={{ font: '11px "DM Mono", monospace', color: '#71887b' }}>
+                          ⏱️ {previewRoutine.estimated_duration_min} min
+                        </span>
+                      </div>
+                    </div>
+                    <p style={{ margin: '8px 0 0 0', font: '12px Manrope, sans-serif', color: '#55675c', lineHeight: 1.4 }}>
+                      💡 {previewRoutine.coaching_summary}
+                    </p>
+                  </div>
+
+                  {/* Exercises List */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <span style={{ font: '700 10px "DM Mono", monospace', color: '#55675c', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Curated Movements &amp; Starting Weights
+                    </span>
+                    {previewRoutine.exercises.map((ex, i) => (
+                      <div
+                        key={ex.exercise_id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          background: '#ffffff',
+                          border: '1px solid #edf2eb',
+                          borderRadius: 6,
+                          padding: '8px 12px',
+                        }}
+                      >
+                        <div>
+                          <strong style={{ fontSize: 13, color: '#14221b' }}>{i + 1}. {ex.name}</strong>
+                          <div style={{ fontSize: 11, color: '#71887b', display: 'flex', gap: 8, marginTop: 2 }}>
+                            <span>{ex.primary_muscle}</span>
+                            <span>&bull;</span>
+                            <span>{ex.equipment}</span>
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <span style={{ font: '700 12px "DM Mono", monospace', color: '#132720', display: 'block' }}>
+                            {ex.target_sets} sets &times; {ex.target_reps} reps
+                          </span>
+                          <span style={{ fontSize: 11, color: '#2d6a4f', fontFamily: 'DM Mono, monospace' }}>
+                            {ex.suggested_weight_kg > 0 ? `@ ${ex.suggested_weight_kg} kg` : 'Bodyweight'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Action Buttons */}
+              <div className="diet-modal-footer">
+                <button
+                  type="button"
+                  onClick={() => setShowRecModal(false)}
+                  className="diet-btn-cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={recLoading || !previewRoutine}
+                  onClick={() => loadRecommendedRoutine(recSplit)}
+                  className="diet-btn-submit"
+                >
+                  ⚡ Load Routine into Session
+                </button>
+              </div>
             </div>
           </div>
         </div>

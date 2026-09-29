@@ -3,7 +3,7 @@
 **Document Version:** 1.0.0  
 **Project:** NutriSync (*formerly FitWise AI*)  
 **Last Updated:** August 2026  
-**Status:** Core Foundation, Biometrics, and Interactive Workout Engine Complete (Sprints 0 – 6)
+**Status:** Core Foundation, Biometrics, Workout Engine, Progress Analytics, and Smart Grocery Diet Planner Complete (Sprints 0 – 8)
 
 ---
 
@@ -188,6 +188,21 @@ This enables sub-millisecond retrieval speeds, zero-schema-lock flexibility for 
 - **Workout History View (`/workouts/history`):** Chronological archive of logged sessions with expandable drill-down into individual exercises and completed set parameters.
 - **Dashboard Integration:** Added "+ Start Workout" header button, "History" navigation, and a prominent "Ready to Train? Launch Workout" hero CTA card.
 
+### ✅ Sprint 7: Progress Analytics, Telemetry Visualizations & Dashboard Overhaul
+- **Historical Charting via Recharts:**
+  - Integrated interactive Recharts visualizations: **Volume Progression Tonnage AreaChart**, **Weekly Workout Consistency BarChart** (with $4\text{ sessions/week}$ baseline), and **Caloric Expenditure AreaChart**.
+  - Engineered custom dark athletic tooltips (`CustomTooltip`) featuring session titles, timestamps, and metric units.
+  - Implemented view switcher tabs, KPI summary cards (Total Volume Lifted, Total Sessions, Avg Intensity, Total Energy Burned), and an adaptive empty state with training CTA.
+- **Backend Analytics API (`GET /api/v1/progress/stats`):**
+  - Aggregates user workouts into chronological volume curves, weekly ISO frequency distributions, and metabolic expenditure trends.
+  - Automatic caloric expenditure computation & legacy database backfill based on session duration, volume tonnage, and athlete body weight.
+- **Focus Mode Live Calorie HUD:**
+  - Added live metabolic burn calculation to active workout HUD (`EST. BURN: XX kcal`) and End Session modal, persisting energy expenditure to PostgreSQL.
+- **Dashboard Usability & Aesthetics Overhaul:**
+  - Removed legacy global `overflow: hidden`, restoring natural scrolling.
+  - Expanded dashboard workspace from cramped $1040\text{px}$ to $1360\text{px}$ for optimal screen utilization.
+  - Top Executive 4-Card HUD Ribbon, asymmetric 2-column layout, and interactive color-coded visual BMI gauge.
+
 ---
 
 ## 5. Sports Science Formulations & Algorithmic Engine
@@ -265,8 +280,41 @@ All endpoints are hosted under prefix `/api/v1` on `http://localhost:8000`.
 | `GET` | `/workouts` | Yes (Bearer) | Retrieves athlete's workout history | None (returns list sorted `started_at DESC`) |
 | `GET` | `/workouts/{id}`| Yes (Bearer) | Retrieves single session with sets | Workout UUID in path |
 | `DELETE`| `/workouts/{id}`| Yes (Bearer) | Deletes workout session (cascading) | Workout UUID in path |
+| `GET` | `/diet/pantry` | Yes (Bearer) | Retrieves athlete's active pantry inventory | None |
+| `POST` | `/diet/pantry` | Yes (Bearer) | Adds item with auto-calculated macros | `PantryItemCreate` (name, quantity, unit, category) |
+| `POST` | `/diet/pantry/bulk` | Yes (Bearer) | Bulk loads athlete staples (Starter Kit) | List of `PantryItemCreate` |
+| `PUT` | `/diet/pantry/{id}` | Yes (Bearer) | Updates on-hand quantity or unit | `quantity`, `unit` |
+| `DELETE`| `/diet/pantry/{id}` | Yes (Bearer) | Deletes single pantry staple | Item UUID in path |
+| `GET` | `/diet/catalog` | Yes (Bearer) | Queries 31 master grocery items | Query param: `category` |
+| `GET` | `/diet/deficiency-analysis` | Yes (Bearer) | Evaluates biometric targets vs pantry | None (Proposal §6.4 engine) |
+| `POST` | `/diet/generate-meal-plan` | Yes (Bearer) | Generates zero-waste pantry meal plan | None (Proposal §6.3 engine) |
+| `GET` | `/diet/shopping-list` | Yes (Bearer) | Retrieves athlete's shopping checklist | None (Proposal §6.5 engine) |
+| `POST` | `/diet/shopping-list` | Yes (Bearer) | Adds item to shopping list | `ShoppingListItemCreate` |
+| `PUT` | `/diet/shopping-list/{id}/toggle` | Yes (Bearer) | Toggles item purchase status | Item UUID in path |
+| `POST` | `/diet/shopping-list/{id}/transfer-to-pantry` | Yes (Bearer) | Moves purchased item into pantry | Item UUID in path |
+| `DELETE`| `/diet/shopping-list/{id}` | Yes (Bearer) | Deletes shopping list item | Item UUID in path |
+| `GET` | `/cheat-meals/templates` | Yes (Bearer) | Queries 10 curated popular indulgence meals | None |
+| `GET` | `/cheat-meals/overview` | Yes (Bearer) | Retrieves summary stats & active rebalance plan | None |
+| `GET` | `/cheat-meals` | Yes (Bearer) | Lists athlete's cheat meal history | None |
+| `POST` | `/cheat-meals` | Yes (Bearer) | Logs cheat meal and generates adaptive plan | `CheatMealCreate` |
+| `GET` | `/cheat-meals/active-plan` | Yes (Bearer) | Retrieves current active rebalance plan | None |
+| `POST` | `/cheat-meals/active-plan/{id}/complete` | Yes (Bearer) | Marks rebalance plan as completed | Plan UUID in path |
+| `DELETE`| `/cheat-meals/{id}` | Yes (Bearer) | Deletes cheat meal log | Meal UUID in path |
+| `PUT` | `/profile` | Yes (Bearer) | Partial update of goals, target weight, activity tier, dietary framework | `target_weight_kg`, `primary_goal`, `activity_level`, `dietary_preference` |
+| `GET` | `/workouts/recommendations/splits` | Yes (Bearer) | Returns 5 available training splits + auto daily rotation | None |
+| `GET` | `/workouts/recommendations` | Yes (Bearer) | AI routine recommendation tailored to athlete goal, split, and bodyweight | Query param: `split` (auto, push, pull, legs, full_body, metabolic_hiit) |
+| `GET` | `/progress/biometrics` | Yes (Bearer) | Retrieves historical weigh-ins, body fat %, measurements, and trajectory points | None |
+| `POST` | `/progress/biometrics` | Yes (Bearer) | Logs weigh-in, auto-syncs `UserProfile.weight_kg` and recalculates Mifflin-St Jeor TDEE | `BiometricLogCreate` |
+| `DELETE`| `/progress/biometrics/{id}` | Yes (Bearer) | Deletes a historical weigh-in entry | Log UUID in path |
+
+> 📖 **Detailed Architecture Guides:**
+> - [Biometrics & Onboarding Guide](file:///c:/Users/dhiwa/Documents/Nutrisync/NutriSync/docs/biometrics_and_onboarding_guide.md)
+> - [Fitness & Workout Engine Guide](file:///c:/Users/dhiwa/Documents/Nutrisync/NutriSync/docs/fitness_and_workout_engine_guide.md)
+> - [Smart Grocery & Diet Planner Guide](file:///c:/Users/dhiwa/Documents/Nutrisync/NutriSync/docs/smart_grocery_and_diet_planner_guide.md)
+> - [Cheat Meal & Biometrics Architecture Guide](file:///c:/Users/dhiwa/Documents/Nutrisync/NutriSync/docs/cheat_meal_and_biometrics_guide.md)
 
 ---
+
 
 ## 7. Proposal Alignment & Roadmap Matrix
 
@@ -274,13 +322,14 @@ Comparison of current implementations against the original **FitWise AI** propos
 
 | Proposal Section | Feature Area | Current Status | Implemented Components |
 | :--- | :--- | :---: | :--- |
-| **§ 5 & 6.1** | User Profile & Biometric Calibration | 🟢 **100% Complete** | Bcrypt auth, JWT sessions, 4-phase onboarding wizard, Mifflin-St Jeor BMR, TDEE, macro split. |
-| **§ 6.2** | Personalized Workout Engine | 🟢 **75% Complete** | Master 25-exercise database, Focus Mode HUD, interactive set/rep tracking, live volume tonnage, workout history archive. *(Remaining: AI automatic split generator).* |
-| **§ 6.3** | Smart Grocery-Based Diet Planner | 🔴 **Upcoming Phase** | Pantry inventory management, recipe matcher based *only* on groceries on hand. |
-| **§ 6.4** | Nutritional Deficiency Detection | 🔴 **Upcoming Phase** | Comparing grocery inventory against daily macro/micro targets (e.g. flagging 50g protein shortage). |
-| **§ 6.5** | Smart Shopping List Generator | 🔴 **Upcoming Phase** | Cost-effective ingredient recommendations to close dietary gaps with minimal waste. |
-| **§ 6.6 & 6.7** | Cheat Meal Tracker & Adaptive Balancer | 🔴 **Upcoming Phase** | Quick-log off-plan meals with automatic multi-day caloric & step compensation without extreme diets. |
-| **§ 6.8** | Progress Tracking & Analytics | 🟡 **30% Complete** | Telemetry readouts live. *(Remaining: Historical charting via Recharts/Chart.js for weight and volume trends).* |
+| **§ 5 & 6.1** | User Profile & Biometric Calibration | 🟢 **100% Complete** | Bcrypt auth, JWT sessions, 4-phase onboarding wizard, Mifflin-St Jeor BMR, TDEE, dynamic macro split, and live Goal & Biometric Quick Calibration. |
+| **§ 6.2** | Personalized Workout Recommendation Engine | 🟢 **100% Complete** | Master 25-exercise database, Focus Mode HUD, interactive set/rep tracking, live volume tonnage, workout history, plus AI Personalized Routine Generator with goal-calibrated sets/reps and automated history-based split rotation (`/api/v1/workouts/recommendations`). |
+| **§ 6.3** | Smart Grocery-Based Diet Planner | 🟢 **100% Complete** | Pantry inventory tracking, master ingredient catalog (31 items), zero-waste meal plan generator using only available ingredients on hand. |
+| **§ 6.4** | Nutritional Deficiency Detection | 🟢 **100% Complete** | Comparing aggregate grocery reserves against Mifflin-St Jeor daily protein/energy/fiber targets, flagging specific gaps (e.g. 50g protein shortage) with targeted grocery additions. |
+| **§ 6.5** | Smart Shopping List Generator | 🟢 **100% Complete** | Dynamic shopping checklist, 1-click addition from deficiency recommendations, and instant transfer from shopping list to active pantry inventory. |
+| **§ 6.6 & 6.7** | Cheat Meal Tracker & Adaptive Balancer | 🟢 **100% Complete** | Quick-log off-plan meals with 10 popular templates, multi-day adaptive rebalancing (Hybrid, Step Burn, Diet Buffer), sports science glycogen supercompensation advice. |
+| **§ 6.8** | Progress Tracking & Biometrics Trajectory | 🟢 **100% Complete** | Telemetry readouts live, Recharts volume progression curves, weekly workout consistency bar charts, caloric expenditure tracking, and PostgreSQL `biometric_logs` engine with historical weigh-ins, body fat %, measurements, and goal trajectory curves. |
+
 
 ---
 

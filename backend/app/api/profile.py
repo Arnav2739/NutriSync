@@ -94,3 +94,38 @@ def check_profile_status(
         has_profile=profile is not None,
         profile=profile
     )
+
+
+@router.put("", response_model=ProfileResponse)
+@router.put("/", response_model=ProfileResponse)
+@router.patch("", response_model=ProfileResponse)
+def update_profile(
+    profile_update: ProfileUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Partially update user goals, target weight, activity tier, or dietary preferences.
+    """
+    profile = (
+        db.query(UserProfile)
+        .filter(UserProfile.user_id == current_user.id)
+        .first()
+    )
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found. Complete onboarding first.",
+        )
+
+    for field, val in profile_update.model_dump(exclude_unset=True).items():
+        if val is not None:
+            setattr(profile, field, val)
+
+    if profile_update.primary_goal:
+        current_user.goal = profile_update.primary_goal
+
+    db.commit()
+    db.refresh(profile)
+    return profile
+

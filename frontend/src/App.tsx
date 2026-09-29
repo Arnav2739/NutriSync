@@ -6,6 +6,8 @@ import OnboardingPage from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
 import ActiveWorkout from './pages/ActiveWorkout';
 import WorkoutHistory from './pages/WorkoutHistory';
+import DietPlanner from './pages/DietPlanner';
+import CheatMealTracker from './pages/CheatMealTracker';
 
 // Guard component that requires a valid access token
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -54,7 +56,24 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/diet"
+          element={
+            <ProtectedRoute>
+              <DietPlanner />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cheat-meals"
+          element={
+            <ProtectedRoute>
+              <CheatMealTracker />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/login" replace />} />
+
       </Routes>
     </Router>
   );

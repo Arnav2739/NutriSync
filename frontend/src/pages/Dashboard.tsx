@@ -1,10 +1,11 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import Logo from '../components/Logo';
 import { SparklesIcon } from '../components/icons';
 import ProgressCharts from '../components/ProgressCharts';
 import { fetchProgressStats, ProgressStatsResponse } from '../services/progress';
+import { biometricsService } from '../services/biometrics';
 
 interface UserProfileData {
   id: string;
@@ -27,6 +28,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState<boolean>(true);
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+
+  // Goal & Biometrics Quick Calibration Modal (Proposal §6.1)
+  const [showGoalModal, setShowGoalModal] = useState<boolean>(false);
+  const [editGoal, setEditGoal] = useState<string>('');
+  const [editTargetWeight, setEditTargetWeight] = useState<string>('');
+  const [editActivity, setEditActivity] = useState<string>('');
+  const [editDiet, setEditDiet] = useState<string>('');
+  const [savingGoal, setSavingGoal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +84,36 @@ export default function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     navigate('/login');
+  };
+
+  const openGoalModal = () => {
+    if (profile) {
+      setEditGoal(profile.primary_goal || 'Muscle Hypertrophy');
+      setEditTargetWeight(String(profile.target_weight_kg));
+      setEditActivity(profile.activity_level || 'Moderately Active');
+      setEditDiet(profile.dietary_preference || 'High-Protein Athlete');
+      setShowGoalModal(true);
+    }
+  };
+
+  const handleSaveGoal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) return;
+    setSavingGoal(true);
+    try {
+      const updated = await biometricsService.updateProfile({
+        primary_goal: editGoal,
+        target_weight_kg: parseFloat(editTargetWeight) || profile.target_weight_kg,
+        activity_level: editActivity,
+        dietary_preference: editDiet,
+      });
+      setProfile(prev => prev ? { ...prev, ...updated } : null);
+      setShowGoalModal(false);
+    } catch (err) {
+      console.error('Failed to update profile ambitions:', err);
+    } finally {
+      setSavingGoal(false);
+    }
   };
 
   if (loading) {
@@ -128,6 +167,12 @@ export default function Dashboard() {
           </span>
         </div>
         <div className="nav-actions">
+          <Link to="/diet" className="nav-link-btn" style={{ borderColor: 'rgba(203, 237, 62, 0.4)', color: '#cbed3e' }}>
+            🥫 Pantry & Diet
+          </Link>
+          <Link to="/cheat-meals" className="nav-link-btn" style={{ borderColor: 'rgba(251, 191, 36, 0.4)', color: '#fbbf24' }}>
+            🍕 Cheat Balancer
+          </Link>
           <Link to="/workouts/active" className="nav-link-btn accent">
             + Start Workout
           </Link>
@@ -186,9 +231,27 @@ export default function Dashboard() {
               <div className="hud-card">
                 <div className="hud-card-top">
                   <span className="hud-label">WEIGHT TRAJECTORY</span>
-                  <span className="hud-pill">
-                    {weightDelta > 0 ? 'Surplus' : weightDelta < 0 ? 'Deficit' : 'Maintenance'}
-                  </span>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <span className="hud-pill">
+                      {weightDelta > 0 ? 'Surplus' : weightDelta < 0 ? 'Deficit' : 'Maintenance'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={openGoalModal}
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: 4,
+                        color: '#cbed3e',
+                        fontSize: 10,
+                        padding: '1px 5px',
+                        cursor: 'pointer',
+                        fontFamily: 'DM Mono, monospace',
+                      }}
+                    >
+                      ✎ Edit
+                    </button>
+                  </div>
                 </div>
                 <div className="hud-metric">
                   <strong>{profile.weight_kg}</strong> <small>kg</small>
@@ -267,7 +330,11 @@ export default function Dashboard() {
                 </section>
 
                 {/* 2. §6.8 Progress Analytics & Performance Visualizations */}
-                <ProgressCharts stats={progressStats} loading={progressLoading} />
+                <ProgressCharts
+                  stats={progressStats}
+                  loading={progressLoading}
+                  onWeightLogged={(newWt) => setProfile(prev => prev ? { ...prev, weight_kg: newWt } : null)}
+                />
               </div>
 
               {/* SIDEBAR COLUMN (Right / 37%): Quick Launch + Physical Baseline + Ambition Matrix */}
@@ -286,14 +353,49 @@ export default function Dashboard() {
                     Log sets, reps & weight in real time. Track volume tonnage curves with automatic rest timers.
                   </p>
                   <div className="action-card-buttons">
-                    <Link to="/workouts/active" className="workout-cta-primary">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                        <path d="M6.5 6.5h11M12 3v3M4 12h2m12 0h2M6.5 17.5h11M12 18v3M7 12a5 5 0 0110 0" />
-                      </svg>
-                      Launch Workout
+                    <Link to="/workouts/active?routine=auto" className="workout-cta-primary" style={{ background: '#cbed3e', color: '#132720' }}>
+                      <span>✨</span> Start AI Recommended Routine &rarr;
                     </Link>
-                    <Link to="/workouts/history" className="workout-cta-secondary">
-                      View Session History &rarr;
+                    <Link to="/workouts/active" className="workout-cta-secondary">
+                      Launch Custom Session
+                    </Link>
+                  </div>
+                </section>
+
+                {/* 1.5 Smart Grocery & Diet Planner Widget (Proposal §6.3 - §6.5) */}
+                <section className="dash-card" style={{ borderColor: 'rgba(203, 237, 62, 0.25)', background: 'linear-gradient(145deg, #132720, #0f1f18)' }}>
+                  <div className="card-top">
+                    <span className="card-tag volt">
+                      <span className="pulse-dot" /> PROPOSAL §6.3 &bull; DIET PLANNER
+                    </span>
+                    <span className="card-badge-pill" style={{ color: '#cbed3e', borderColor: '#cbed3e' }}>PANTRY-AWARE</span>
+                  </div>
+                  <h3>Smart Grocery Diet</h3>
+                  <p className="action-card-desc">
+                    Generate healthy athletic meals using <i>only</i> groceries on hand in your pantry. Detect nutritional protein gaps automatically.
+                  </p>
+                  <div className="action-card-buttons">
+                    <Link to="/diet" className="workout-cta-primary" style={{ background: '#cbed3e', color: '#0c1914' }}>
+                      <span>🥫</span> Open Diet Planner &rarr;
+                    </Link>
+                  </div>
+                </section>
+
+                {/* 1.6 Cheat Meal & Adaptive Balancer Widget (Proposal §6.6 - §6.7) */}
+                <section className="dash-card" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', background: 'linear-gradient(145deg, #1f1b12, #14120a)' }}>
+                  <div className="card-top">
+                    <span className="card-tag" style={{ color: '#fbbf24' }}>
+                      <span className="pulse-dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} /> PROPOSAL §6.6 &bull; ADAPTIVE BALANCER
+                    </span>
+                    <span className="card-badge-pill" style={{ color: '#fbbf24', borderColor: '#fbbf24' }}>NON-PUNITIVE</span>
+                  </div>
+                  <h3 style={{ color: '#ffffff' }}>Cheat Meal Balancer</h3>
+                  <p className="action-card-desc" style={{ color: '#d4cebe' }}>
+                    Track off-plan meals guilt-free. Automatically distributes surplus calories across 2–4 days via safe buffers and steps.
+                  </p>
+                  <div className="action-card-buttons">
+                    <Link to="/cheat-meals" className="workout-cta-primary" style={{ background: '#fbbf24', color: '#132720' }}>
+                      <span>🍕</span> Manage Indulgence &rarr;
                     </Link>
                   </div>
                 </section>
@@ -302,7 +404,22 @@ export default function Dashboard() {
                 <section className="dash-card baseline-card">
                   <div className="card-top">
                     <span className="card-tag">BIOMETRIC MATRIX</span>
-                    <span className="card-status-dot" />
+                    <button
+                      type="button"
+                      onClick={openGoalModal}
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid #d8e2d7',
+                        borderRadius: 4,
+                        color: '#132720',
+                        fontSize: 11,
+                        padding: '2px 8px',
+                        cursor: 'pointer',
+                        fontWeight: 600,
+                      }}
+                    >
+                      ✎ Edit Targets
+                    </button>
                   </div>
                   <h3>Physical Baseline</h3>
                   <div className="metrics-row">
@@ -386,6 +503,104 @@ export default function Dashboard() {
             </div>
           </>
         )}
+      {/* ── GOAL & BIOMETRIC CALIBRATION MODAL (Proposal §6.1) ── */}
+      {showGoalModal && (
+        <div className="diet-modal-overlay">
+          <div className="diet-modal-box" style={{ maxWidth: 500 }}>
+            <div className="diet-modal-header">
+              <div>
+                <h3 className="diet-modal-title">Edit Goals &amp; Biometrics</h3>
+                <span style={{ font: '11px "DM Mono", monospace', color: '#6a7e71', display: 'block', marginTop: 2 }}>
+                  RECALIBRATE METABOLIC TARGETS &bull; PROPOSAL §6.1
+                </span>
+              </div>
+              <button onClick={() => setShowGoalModal(false)} className="diet-modal-close">
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveGoal} className="diet-form">
+              <div className="diet-field">
+                <label className="diet-label">Primary Fitness Goal</label>
+                <select
+                  value={editGoal}
+                  onChange={(e) => setEditGoal(e.target.value)}
+                  className="diet-input"
+                >
+                  <option value="Muscle Hypertrophy">Muscle Hypertrophy (Lean Bulk)</option>
+                  <option value="Lose Weight">Lose Weight (Fat Loss Deficit)</option>
+                  <option value="Build Strength">Build Strength (Heavy Power)</option>
+                  <option value="Athletic Endurance">Athletic Endurance &amp; Stamina</option>
+                  <option value="Maintenance">Maintenance &amp; Longevity</option>
+                </select>
+              </div>
+
+              <div className="diet-form-row">
+                <div className="diet-field">
+                  <label className="diet-label">Target Weight (kg) *</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="30"
+                    max="250"
+                    required
+                    value={editTargetWeight}
+                    onChange={(e) => setEditTargetWeight(e.target.value)}
+                    className="diet-input"
+                  />
+                </div>
+                <div className="diet-field">
+                  <label className="diet-label">Activity Level</label>
+                  <select
+                    value={editActivity}
+                    onChange={(e) => setEditActivity(e.target.value)}
+                    className="diet-input"
+                  >
+                    <option value="Sedentary">Sedentary (Desk Job)</option>
+                    <option value="Lightly Active">Lightly Active (1-3 days/wk)</option>
+                    <option value="Moderately Active">Moderately Active (3-5 days/wk)</option>
+                    <option value="Very Active">Very Active (6-7 days/wk)</option>
+                    <option value="Extra Active">Extra Active (2x/day / Labor)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="diet-field">
+                <label className="diet-label">Dietary Preference</label>
+                <select
+                  value={editDiet}
+                  onChange={(e) => setEditDiet(e.target.value)}
+                  className="diet-input"
+                >
+                  <option value="High-Protein Athlete">High-Protein Athlete</option>
+                  <option value="Omnivore">Omnivore</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                  <option value="Pescatarian">Pescatarian</option>
+                  <option value="Keto">Keto / Low-Carb</option>
+                </select>
+              </div>
+
+              <div className="diet-modal-footer">
+                <button
+                  type="button"
+                  onClick={() => setShowGoalModal(false)}
+                  className="diet-btn-cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingGoal}
+                  className="diet-btn-submit"
+                >
+                  {savingGoal ? 'Calibrating...' : '✓ Recalibrate Targets'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       </main>
     </div>
   );

@@ -21,3 +21,11 @@ class User(Base):
     # One-to-many relationship with WorkoutLog
     workout_logs = relationship("WorkoutLog", back_populates="user", cascade="all, delete-orphan")
 
+    # Grocery & Diet Relationships
+    pantry_items = relationship("PantryItem", back_populates="user", cascade="all, delete-orphan")
+    saved_meal_plans = relationship("SavedMealPlan", back_populates="user", cascade="all, delete-orphan")
+    shopping_list_items = relationship("ShoppingListItem", back_populates="user", cascade="all, delete-orphan")
+
+    # Biometrics & Progress Tracking
+    biometric_logs = relationship("BiometricLog", back_populates="user", cascade="all, delete-orphan")
+

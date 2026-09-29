@@ -147,3 +147,35 @@ Retrieves detailed breakdown of a single workout session.
 
 ### 5. `DELETE /api/v1/workouts/{workout_id}` (JWT Protected)
 Deletes the workout log and automatically cascades deletion to its associated exercise logs.
+
+---
+
+### 6. `GET /api/v1/workouts/recommendations/splits` (JWT Protected)
+Retrieves the 5 available training splits supported by the recommendation engine:
+- `auto`: Automated daily rotation based on recent muscle volume and workout history.
+- `push`: Chest, Shoulders, Triceps hypertrophy and pressing strength.
+- `pull`: Back, Biceps, Rear Deltoids pulling power and posture.
+- `legs`: Quads, Hamstrings, Glutes, Calves lower-body foundational strength.
+- `full_body`: Balanced compound movements across all major kinetic chains.
+- `metabolic_hiit`: High-density conditioning with short rest intervals and elevated heart rate.
+
+---
+
+### 7. `GET /api/v1/workouts/recommendations` (JWT Protected)
+Generates an AI personalized workout routine tailored to the athlete's primary fitness goal (`Hypertrophy`, `Fat Loss`, `Strength`, `Endurance`) and current body weight.
+
+**Query Parameters:**
+- `split` (optional, default: `auto`): Target training split (`auto`, `push`, `pull`, `legs`, `full_body`, `metabolic_hiit`).
+
+**Key Recommendation Features:**
+1. **Dynamic Set & Rep Pacing:**
+   - Hypertrophy: 3–4 sets of 8–12 reps with 75s–90s rest.
+   - Fat Loss / Cutting: 3 sets of 12–15 reps with 45s–60s rest.
+   - Strength / Power: 4–5 sets of 3–6 reps with 120s–180s rest.
+   - Endurance: 3 sets of 15–20 reps with 45s rest.
+2. **Bodyweight-Proportional Starting Loads:**
+   - Automatically computes recommended starting weight in kg based on user's calibrated weight.
+3. **Coaching & Execution Cues:**
+   - Dynamic movement cues (e.g. *"Explosive drive off floor; lock out hips cleanly"* or *"Slow 3-second eccentric stretch"*).
+4. **Seamless Focus Mode Launch:**
+   - Athlete can launch the recommendation directly into the active training tracker via `/workouts/active?routine=auto` or `?routine=push`.

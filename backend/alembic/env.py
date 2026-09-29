@@ -24,8 +24,11 @@ from app.db.database import Base
 from app.models.user import User
 from app.models.profile import UserProfile
 from app.models.workout import Exercise, WorkoutLog, WorkoutExerciseLog
+from app.models.grocery import PantryItem, SavedMealPlan, ShoppingListItem
+from app.models.cheat_meal import CheatMealLog, AdaptiveRebalancePlan
 
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
