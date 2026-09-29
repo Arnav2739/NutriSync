@@ -99,6 +99,21 @@ export default function ActiveWorkout() {
 
   const totalSetsCount = selectedExercises.reduce((total, ex) => total + ex.sets.length, 0);
 
+  // User weight for live caloric expenditure estimation
+  const [userWeight, setUserWeight] = useState<number>(70);
+
+  useEffect(() => {
+    api.get('/profile/me').then(res => {
+      if (res.data?.weight_kg) setUserWeight(Number(res.data.weight_kg));
+    }).catch(() => {});
+  }, []);
+
+  // Live Caloric Expenditure Estimation
+  const liveCalories = Math.max(
+    completedSetsCount > 0 ? 15 : 0,
+    Math.round(((elapsedSeconds / 60) * 5.5 * (userWeight / 70)) + (liveVolume * 0.04))
+  );
+
   // ── Load Exercise Catalog ──
   const loadCatalog = useCallback(async () => {
     setCatalogLoading(true);
