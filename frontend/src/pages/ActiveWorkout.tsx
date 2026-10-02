@@ -125,7 +125,7 @@ export default function ActiveWorkout() {
     Math.round(((elapsedSeconds / 60) * 5.5 * (userWeight / 70)) + (liveVolume * 0.04))
   );
 
-  // ── Load Recommended Routine (Proposal §6.2) ──
+  // ── Load Recommended Routine  ──
   const loadRecommendedRoutine = useCallback(async (splitKey: string = 'auto') => {
     setRecLoading(true);
     try {
@@ -667,7 +667,7 @@ export default function ActiveWorkout() {
         </div>
       )}
 
-      {/* ── AI WORKOUT RECOMMENDATION MODAL (Proposal §6.2) ── */}
+      {/* ── AI WORKOUT RECOMMENDATION MODAL  ── */}
       {showRecModal && (
         <div className="diet-modal-overlay">
           <div className="diet-modal-box" style={{ maxWidth: 580 }}>
@@ -675,7 +675,7 @@ export default function ActiveWorkout() {
               <div>
                 <h3 className="diet-modal-title">AI Routine Generator</h3>
                 <span style={{ font: '11px "DM Mono", monospace', color: '#6a7e71', display: 'block', marginTop: 2 }}>
-                  CLINICALLY CALIBRATED TRAINING BLUEPRINT &bull; PROPOSAL §6.2
+                  CLINICALLY CALIBRATED TRAINING BLUEPRINT
                 </span>
               </div>
               <button onClick={() => setShowRecModal(false)} className="diet-modal-close">

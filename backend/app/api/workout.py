@@ -192,7 +192,7 @@ def list_user_workouts(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PERSONALIZED WORKOUT RECOMMENDATION ENGINE (Proposal §6.2)
+# PERSONALIZED WORKOUT RECOMMENDATION ENGINE 
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.get("/workouts/recommendations/splits", response_model=List[RoutineOptionSummary])

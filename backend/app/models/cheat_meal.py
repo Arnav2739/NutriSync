@@ -8,7 +8,7 @@ from app.db.database import Base
 
 class CheatMealLog(Base):
     """
-    Cheat Meal Tracker (Project Proposal §6.6).
+    Cheat Meal Tracker .
     Captures off-plan / indulgence meals, estimated energy/macro load, and emotional context.
     """
     __tablename__ = "cheat_meal_logs"
@@ -34,7 +34,7 @@ class CheatMealLog(Base):
 
 class AdaptiveRebalancePlan(Base):
     """
-    Adaptive Caloric & Expenditure Balancer (Project Proposal §6.7).
+    Adaptive Caloric & Expenditure Balancer .
     Calculates a non-punitive multi-day caloric and step compensation strategy
     so weekly fat loss or maintenance trajectories are preserved without severe dieting.
     """

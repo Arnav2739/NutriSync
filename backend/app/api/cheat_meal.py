@@ -90,7 +90,7 @@ def log_cheat_meal(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Logs an indulgence meal and computes a non-punitive adaptive rebalancing plan (Proposal §6.6 & §6.7).
+    Logs an indulgence meal and computes a non-punitive adaptive rebalancing plan.
     """
     # 1. Fetch user profile for clinical Mifflin-St Jeor calibration
     profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()

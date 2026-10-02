@@ -155,7 +155,7 @@ def detect_nutritional_deficiencies(
 ) -> NutritionalDeficiencyResponse:
     """
     Compares the total available groceries in the user's pantry against
-    their calibrated sports science requirements (Proposal §6.4).
+    their calibrated sports science requirements .
     """
     targets = calculate_athlete_targets(profile)
     
@@ -181,7 +181,7 @@ def detect_nutritional_deficiencies(
     suggested_additions: List[SuggestedAddition] = []
     health_penalty = 0
 
-    # 1. Protein Deficiency Check (Core USP from Proposal §6.4)
+    # 1. Protein Deficiency Check (Core USP )
     protein_gap = round(targets["protein_g"] - daily_available_protein, 1)
     if protein_gap > 15.0:
         health_penalty += 35
@@ -364,7 +364,7 @@ def generate_grocery_meal_plan(
 ) -> GeneratedMealPlanResponse:
     """
     Generates a full day's meal plan (Breakfast, Lunch, Dinner, Snack)
-    using ONLY available pantry groceries (Proposal §6.3).
+    using ONLY available pantry groceries .
     """
     targets = calculate_athlete_targets(profile)
     

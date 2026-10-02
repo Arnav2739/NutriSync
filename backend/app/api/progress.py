@@ -130,7 +130,7 @@ def get_progress_stats(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# BIOMETRICS & WEIGHT TRAJECTORY TRACKING (Proposal §6.1 & §6.8)
+# BIOMETRICS & WEIGHT TRAJECTORY TRACKING
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.get("/biometrics", response_model=BiometricsProgressOverview)
@@ -292,4 +292,4 @@ def delete_biometric_entry(
         )
     db.delete(log)
     db.commit()
-    return None
+    return None

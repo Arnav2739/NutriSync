@@ -216,7 +216,7 @@ export default function CheatMealTracker() {
       <nav className="dashboard-nav">
         <div className="nav-brand">
           <Logo />
-          <span className="nav-edition">ADAPTIVE METABOLIC BALANCER &bull; §6.6 &amp; §6.7</span>
+          <span className="nav-edition">ADAPTIVE METABOLIC BALANCER</span>
           <span className="nav-live-indicator">
             <span className="live-dot" /> NON-PUNITIVE
           </span>
@@ -240,7 +240,7 @@ export default function CheatMealTracker() {
         <header className="dashboard-welcome-bar">
           <div>
             <div className="eyebrow">
-              <span /> PROPOSAL &sect;6.6 &amp; &sect;6.7 &bull; ADAPTIVE CALORIC REBALANCER
+              <span /> METABOLIC ADAPTATION &bull; CALORIC REBALANCER
             </div>
             <h1>Cheat Meal Tracker &amp; Adaptive Balancer</h1>
             <p className="intro">
@@ -316,7 +316,7 @@ export default function CheatMealTracker() {
         </div>
 
         {/* ========================================================================= */}
-        {/* ACTIVE ADAPTIVE REBALANCE BANNER (Proposal §6.7)                         */}
+        {/* ACTIVE ADAPTIVE REBALANCE BANNER                          */}
         {/* ========================================================================= */}
         {activePlan ? (
           <div className="rebalance-active-banner">
@@ -635,7 +635,7 @@ export default function CheatMealTracker() {
                 </div>
               </div>
 
-              {/* Strategy Selector (Proposal §6.7) */}
+              {/* Strategy Selector  */}
               <div className="diet-field">
                 <label className="diet-label">Choose Adaptive Rebalance Strategy</label>
                 <div className="strategy-picker">

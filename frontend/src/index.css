@@ -1985,6 +1985,9 @@ input[type="text"] {
 
 .macro-bar div {
   height: 100%;
+  border-radius: 99px;
+  transform-origin: left center;
+  animation: barGrow 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .macro-split-card.protein .macro-bar div {
@@ -3870,7 +3873,235 @@ input[type="text"] {
 }
 
 /* ========================================================
-   SMART GROCERY & DIET PLANNER (SPRINT C / PROPOSAL §6.3–§6.5)
+   LUXURY MOTION SYSTEM & DECK INTERACTION STYLES
+   ======================================================== */
+
+@keyframes fadeInUpSmooth {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes deckSwap {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tabContentFade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes barGrow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* Staggered entrance animation classes */
+.motion-stagger-1 {
+  animation: fadeInUpSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.04s both;
+}
+.motion-stagger-2 {
+  animation: fadeInUpSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.10s both;
+}
+.motion-stagger-3 {
+  animation: fadeInUpSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+.motion-stagger-4 {
+  animation: fadeInUpSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+.motion-stagger-5 {
+  animation: fadeInUpSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+/* Enhanced interactive card dynamics & hover lift */
+.dash-card, .hud-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dash-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -6px rgba(19, 39, 32, 0.08);
+}
+
+.workout-action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(19, 39, 32, 0.3), 0 0 20px -4px rgba(203, 237, 62, 0.25) !important;
+}
+
+/* Interactive Nutrition & Metabolic Deck */
+.nutrition-deck-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #132720 0%, #0d1e18 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.nutrition-deck-card:hover {
+  border-color: rgba(203, 237, 62, 0.3) !important;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25) !important;
+}
+
+.deck-header {
+  margin-bottom: 16px;
+}
+
+.deck-nav-pills {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.deck-pill-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: #8fa597;
+  font: 600 12px "DM Mono", monospace;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.deck-pill-btn:hover {
+  color: #e4efe7;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.deck-pill-btn.active.diet {
+  background: rgba(203, 237, 62, 0.18);
+  color: #cbed3e;
+  border: 1px solid rgba(203, 237, 62, 0.35);
+  box-shadow: 0 2px 10px rgba(203, 237, 62, 0.12);
+}
+
+.deck-pill-btn.active.cheat {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 2px 10px rgba(251, 191, 36, 0.12);
+}
+
+.nutrition-deck-content {
+  animation: deckSwap 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.deck-pane h3 {
+  font: 600 19px Manrope, sans-serif;
+  margin-bottom: 6px;
+}
+
+/* Unified Lifestyle Chips in Baseline Card */
+.lifestyle-chips-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.lifestyle-chip {
+  background: #f4f7f2;
+  border: 1px solid #d8e2d7;
+  border-radius: 5px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.2s;
+}
+
+.lifestyle-chip:hover {
+  border-color: rgba(203, 237, 62, 0.8);
+}
+
+.chip-k {
+  font: 10px "DM Mono", monospace;
+  color: #6b7d72;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.chip-v {
+  font: 600 13px Manrope, sans-serif;
+  color: #17241e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lifestyle-chip.delta .chip-v {
+  color: #1a7a42;
+  font-weight: 700;
+  font-family: "DM Mono", monospace;
+}
+
+.recalibrate-btn {
+  background: transparent;
+  border: 1px solid #d8e2d7;
+  border-radius: 4px;
+  color: #132720;
+  font: 600 11px "DM Mono", monospace;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recalibrate-btn:hover {
+  background: #132720;
+  color: #cbed3e;
+  border-color: #132720;
+}
+
+/* Chart animated tab switch */
+.chart-animated-view {
+  animation: tabContentFade 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Micro-press on buttons */
+.workout-cta-primary:active,
+.hero-cta-btn:active,
+.recalibrate-btn:active {
+  transform: scale(0.97);
+}
+
+/* ========================================================
+   SMART GROCERY & DIET PLANNER
    ======================================================== */
 
 .diet-toast {
@@ -4370,7 +4601,7 @@ input[type="text"] {
   text-align: center;
 }
 
-/* TAB 2: DEFICIENCY ANALYSIS (PROPOSAL §6.4) */
+/* TAB 2: DEFICIENCY ANALYSIS  */
 .deficiency-callout {
   background: linear-gradient(135deg, #132720 0%, #1c3b2e 100%);
   color: #ffffff;
@@ -4643,7 +4874,7 @@ input[type="text"] {
   box-shadow: 0 2px 8px rgba(19, 39, 32, 0.2);
 }
 
-/* TAB 3: SMART MEAL PLAN GENERATOR (PROPOSAL §6.3) */
+/* TAB 3: SMART MEAL PLAN GENERATOR  */
 .mealplan-action-card {
   background: #ffffff;
   border: 1px solid #d8e2d7;
@@ -4902,7 +5133,7 @@ input[type="text"] {
   color: #cbed3e;
 }
 
-/* TAB 4: SHOPPING LIST (PROPOSAL §6.5) */
+/* TAB 4: SHOPPING LIST  */
 .shopping-container {
   display: flex;
   flex-direction: column;
@@ -5310,7 +5541,7 @@ input[type="text"] {
 }
 
 /* ========================================================
-   CHEAT MEAL TRACKER & ADAPTIVE BALANCER (PROPOSAL §6.6 & §6.7)
+   CHEAT MEAL TRACKER & ADAPTIVE BALANCER
    ======================================================== */
 
 .rebalance-active-banner {

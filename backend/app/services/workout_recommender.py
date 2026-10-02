@@ -1,5 +1,5 @@
 """
-NutriSync Personalized Workout Recommendation Service (Proposal §6.2)
+NutriSync Personalized Workout Recommendation Service 
 Clinically generates personalized daily workout routines based on athlete biometrics,
 primary fitness goal (Hypertrophy, Fat Loss, Strength, Endurance), and active training split.
 """

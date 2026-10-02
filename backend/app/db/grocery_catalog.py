@@ -1,5 +1,5 @@
 """
-Master Grocery and Recipe Catalog for NutriSync Sprint C (Proposal §6.3 - §6.5)
+Master Grocery and Recipe Catalog for NutriSync Engine
 Contains standardized athletic and pantry staple ingredients with exact nutritional densities,
 paired with a rich recipe matrix for grocery-based meal generation.
 """

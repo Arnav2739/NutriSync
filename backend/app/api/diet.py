@@ -44,7 +44,7 @@ def get_grocery_catalog(category: Optional[str] = None):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PANTRY INVENTORY MANAGEMENT (Proposal §6.3)
+# PANTRY INVENTORY MANAGEMENT 
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.get("/pantry", response_model=List[PantryItemResponse])
@@ -206,7 +206,7 @@ def clear_pantry(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# NUTRITIONAL DEFICIENCY DETECTION (Proposal §6.4)
+# NUTRITIONAL DEFICIENCY DETECTION 
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.get("/deficiency-analysis", response_model=NutritionalDeficiencyResponse)
@@ -224,7 +224,7 @@ def get_deficiency_analysis(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SMART GROCERY MEAL PLAN GENERATOR (Proposal §6.3)
+# SMART GROCERY MEAL PLAN GENERATOR 
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.post("/generate-meal-plan", response_model=GeneratedMealPlanResponse)
@@ -242,7 +242,7 @@ def generate_meal_plan(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SMART SHOPPING LIST GENERATOR (Proposal §6.5)
+# SMART SHOPPING LIST GENERATOR 
 # ══════════════════════════════════════════════════════════════════════════════
 
 @router.get("/shopping-list", response_model=List[ShoppingListItemResponse])

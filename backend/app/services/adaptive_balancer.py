@@ -158,7 +158,7 @@ def compute_adaptive_rebalance(
     strategy: str = "balanced"
 ) -> Dict[str, Any]:
     """
-    Computes a non-punitive, multi-day adaptive rebalancing plan (Proposal §6.7).
+    Computes a non-punitive, multi-day adaptive rebalancing plan .
     Smoothly redistributes excess energy so weekly fat loss / maintenance trajectories remain steady.
     """
     targets = calculate_user_daily_targets(profile)

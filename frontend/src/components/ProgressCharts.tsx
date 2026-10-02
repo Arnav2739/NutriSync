@@ -159,7 +159,7 @@ export default function ProgressCharts({ stats, loading, onWeightLogged }: Progr
       <div className="progress-header">
         <div className="progress-title-block">
           <div className="eyebrow" style={{ color: '#cbed3e' }}>
-            <span style={{ background: '#cbed3e' }} /> TELEMETRY ANALYTICS &bull; §6.8
+            <span style={{ background: '#cbed3e' }} /> TELEMETRY ANALYTICS
           </div>
           <h2>Performance & Biometric Analytics</h2>
           <p className="progress-subtitle">
@@ -309,7 +309,7 @@ export default function ProgressCharts({ stats, loading, onWeightLogged }: Progr
           </div>
         </div>
       ) : (
-        <div className="progress-chart-container">
+        <div key={activeTab} className="progress-chart-container chart-animated-view">
           {/* TAB 1: VOLUME TONNAGE */}
           {activeTab === 'volume' && hasWorkoutData && (
             <div className="chart-wrapper">

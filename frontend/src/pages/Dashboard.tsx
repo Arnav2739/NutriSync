@@ -29,13 +29,14 @@ export default function Dashboard() {
   const [progressLoading, setProgressLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
-  // Goal & Biometrics Quick Calibration Modal (Proposal §6.1)
+  // Goal & Biometrics Quick Calibration Modal 
   const [showGoalModal, setShowGoalModal] = useState<boolean>(false);
   const [editGoal, setEditGoal] = useState<string>('');
   const [editTargetWeight, setEditTargetWeight] = useState<string>('');
   const [editActivity, setEditActivity] = useState<string>('');
   const [editDiet, setEditDiet] = useState<string>('');
   const [savingGoal, setSavingGoal] = useState<boolean>(false);
+  const [activeModuleTab, setActiveModuleTab] = useState<'diet' | 'cheat'>('diet');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -214,7 +215,7 @@ export default function Dashboard() {
         {profile && (
           <>
             {/* Top 4-Metric HUD Ribbon */}
-            <section className="dashboard-hud-ribbon">
+            <section className="dashboard-hud-ribbon motion-stagger-1">
               <div className="hud-card">
                 <div className="hud-card-top">
                   <span className="hud-label">DAILY CALORIC TARGET</span>
@@ -296,7 +297,7 @@ export default function Dashboard() {
               {/* PRIMARY COLUMN (Left / 63%): Nutrition Engine & Progress Charts */}
               <div className="dashboard-primary-column">
                 {/* 1. Daily AI Macro Target Card */}
-                <section className="dash-card macro-engine-card">
+                <section className="dash-card macro-engine-card motion-stagger-2">
                   <div className="card-top">
                     <span className="card-tag">
                       <SparklesIcon /> DAILY MACRONUTRIENT TARGETS
@@ -329,18 +330,20 @@ export default function Dashboard() {
                   </div>
                 </section>
 
-                {/* 2. §6.8 Progress Analytics & Performance Visualizations */}
-                <ProgressCharts
-                  stats={progressStats}
-                  loading={progressLoading}
-                  onWeightLogged={(newWt) => setProfile(prev => prev ? { ...prev, weight_kg: newWt } : null)}
-                />
+                {/* 2. Progress Analytics & Performance Visualizations */}
+                <div className="motion-stagger-3">
+                  <ProgressCharts
+                    stats={progressStats}
+                    loading={progressLoading}
+                    onWeightLogged={(newWt) => setProfile(prev => prev ? { ...prev, weight_kg: newWt } : null)}
+                  />
+                </div>
               </div>
 
-              {/* SIDEBAR COLUMN (Right / 37%): Quick Launch + Physical Baseline + Ambition Matrix */}
+              {/* SIDEBAR COLUMN (Right / 37%): Quick Launch + Nutrition Deck + Unified Biometric Matrix */}
               <aside className="dashboard-sidebar-column">
                 {/* 1. Ready to Train / Quick Launch Card */}
-                <section className="dash-card workout-action-card">
+                <section className="dash-card workout-action-card motion-stagger-2">
                   <div className="action-card-glow" />
                   <div className="action-card-top">
                     <span className="card-tag volt">
@@ -350,7 +353,7 @@ export default function Dashboard() {
                   </div>
                   <h3>Ready to Train?</h3>
                   <p className="action-card-desc">
-                    Log sets, reps & weight in real time. Track volume tonnage curves with automatic rest timers.
+                    Log sets, reps &amp; weight in real time. Track volume tonnage curves with automatic rest timers.
                   </p>
                   <div className="action-card-buttons">
                     <Link to="/workouts/active?routine=auto" className="workout-cta-primary" style={{ background: '#cbed3e', color: '#132720' }}>
@@ -362,66 +365,81 @@ export default function Dashboard() {
                   </div>
                 </section>
 
-                {/* 1.5 Smart Grocery & Diet Planner Widget (Proposal §6.3 - §6.5) */}
-                <section className="dash-card" style={{ borderColor: 'rgba(203, 237, 62, 0.25)', background: 'linear-gradient(145deg, #132720, #0f1f18)' }}>
-                  <div className="card-top">
-                    <span className="card-tag volt">
-                      <span className="pulse-dot" /> PROPOSAL §6.3 &bull; DIET PLANNER
-                    </span>
-                    <span className="card-badge-pill" style={{ color: '#cbed3e', borderColor: '#cbed3e' }}>PANTRY-AWARE</span>
+                {/* 2. Unified Nutrition & Metabolic Balance Deck */}
+                <section className="dash-card nutrition-deck-card motion-stagger-3">
+                  <div className="deck-header">
+                    <div className="deck-nav-pills">
+                      <button
+                        type="button"
+                        className={`deck-pill-btn ${activeModuleTab === 'diet' ? 'active diet' : ''}`}
+                        onClick={() => setActiveModuleTab('diet')}
+                      >
+                        <span>🥫</span> Smart Pantry Diet
+                      </button>
+                      <button
+                        type="button"
+                        className={`deck-pill-btn ${activeModuleTab === 'cheat' ? 'active cheat' : ''}`}
+                        onClick={() => setActiveModuleTab('cheat')}
+                      >
+                        <span>🍕</span> Cheat Balancer
+                      </button>
+                    </div>
                   </div>
-                  <h3>Smart Grocery Diet</h3>
-                  <p className="action-card-desc">
-                    Generate healthy athletic meals using <i>only</i> groceries on hand in your pantry. Detect nutritional protein gaps automatically.
-                  </p>
-                  <div className="action-card-buttons">
-                    <Link to="/diet" className="workout-cta-primary" style={{ background: '#cbed3e', color: '#0c1914' }}>
-                      <span>🥫</span> Open Diet Planner &rarr;
-                    </Link>
+
+                  <div key={activeModuleTab} className="nutrition-deck-content">
+                    {activeModuleTab === 'diet' ? (
+                      <div className="deck-pane diet-pane">
+                        <div className="card-top">
+                          <span className="card-tag volt">
+                            <span className="pulse-dot" /> SMART DIET PLANNER
+                          </span>
+                          <span className="card-badge-pill" style={{ color: '#cbed3e', borderColor: '#cbed3e' }}>PANTRY-AWARE</span>
+                        </div>
+                        <h3 style={{ color: '#ffffff' }}>Zero-Waste Nutrition</h3>
+                        <p className="action-card-desc">
+                          Generate healthy athletic meals using <i>only</i> groceries on hand in your pantry. Detect nutritional protein gaps automatically.
+                        </p>
+                        <div className="action-card-buttons">
+                          <Link to="/diet" className="workout-cta-primary" style={{ background: '#cbed3e', color: '#0c1914' }}>
+                            <span>🥫</span> Open Diet Planner &rarr;
+                          </Link>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="deck-pane cheat-pane">
+                        <div className="card-top">
+                          <span className="card-tag" style={{ color: '#fbbf24' }}>
+                            <span className="pulse-dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} /> ADAPTIVE METABOLIC BALANCER
+                          </span>
+                          <span className="card-badge-pill" style={{ color: '#fbbf24', borderColor: '#fbbf24' }}>NON-PUNITIVE</span>
+                        </div>
+                        <h3 style={{ color: '#ffffff' }}>Cheat Meal Balancer</h3>
+                        <p className="action-card-desc" style={{ color: '#d4cebe' }}>
+                          Track off-plan meals guilt-free. Automatically distributes surplus calories across 2–4 days via safe buffers and steps.
+                        </p>
+                        <div className="action-card-buttons">
+                          <Link to="/cheat-meals" className="workout-cta-primary" style={{ background: '#fbbf24', color: '#132720' }}>
+                            <span>🍕</span> Manage Indulgence &rarr;
+                          </Link>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </section>
 
-                {/* 1.6 Cheat Meal & Adaptive Balancer Widget (Proposal §6.6 - §6.7) */}
-                <section className="dash-card" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', background: 'linear-gradient(145deg, #1f1b12, #14120a)' }}>
-                  <div className="card-top">
-                    <span className="card-tag" style={{ color: '#fbbf24' }}>
-                      <span className="pulse-dot" style={{ background: '#fbbf24', boxShadow: '0 0 8px #fbbf24' }} /> PROPOSAL §6.6 &bull; ADAPTIVE BALANCER
-                    </span>
-                    <span className="card-badge-pill" style={{ color: '#fbbf24', borderColor: '#fbbf24' }}>NON-PUNITIVE</span>
-                  </div>
-                  <h3 style={{ color: '#ffffff' }}>Cheat Meal Balancer</h3>
-                  <p className="action-card-desc" style={{ color: '#d4cebe' }}>
-                    Track off-plan meals guilt-free. Automatically distributes surplus calories across 2–4 days via safe buffers and steps.
-                  </p>
-                  <div className="action-card-buttons">
-                    <Link to="/cheat-meals" className="workout-cta-primary" style={{ background: '#fbbf24', color: '#132720' }}>
-                      <span>🍕</span> Manage Indulgence &rarr;
-                    </Link>
-                  </div>
-                </section>
-
-                {/* 2. Biometrics Card */}
-                <section className="dash-card baseline-card">
+                {/* 3. Unified Biometric Matrix & Baseline */}
+                <section className="dash-card baseline-card motion-stagger-4">
                   <div className="card-top">
                     <span className="card-tag">BIOMETRIC MATRIX</span>
                     <button
                       type="button"
                       onClick={openGoalModal}
-                      style={{
-                        background: 'transparent',
-                        border: '1px solid #d8e2d7',
-                        borderRadius: 4,
-                        color: '#132720',
-                        fontSize: 11,
-                        padding: '2px 8px',
-                        cursor: 'pointer',
-                        fontWeight: 600,
-                      }}
+                      className="recalibrate-btn"
                     >
                       ✎ Edit Targets
                     </button>
                   </div>
-                  <h3>Physical Baseline</h3>
+                  <h3>Physical Baseline &amp; Ambition</h3>
                   <div className="metrics-row">
                     <div className="metric-box">
                       <span>AGE</span>
@@ -438,6 +456,32 @@ export default function Dashboard() {
                     <div className="metric-box">
                       <span>TARGET</span>
                       <strong>{profile.target_weight_kg} <small>kg</small></strong>
+                    </div>
+                  </div>
+
+                  {/* High-Density Lifestyle Chips */}
+                  <div className="lifestyle-chips-row">
+                    <div className="lifestyle-chip">
+                      <span className="chip-k">Primary Goal</span>
+                      <span className="chip-v">{profile.primary_goal || 'Build Strength'}</span>
+                    </div>
+                    <div className="lifestyle-chip">
+                      <span className="chip-k">Dietary Framework</span>
+                      <span className="chip-v">{profile.dietary_preference}</span>
+                    </div>
+                    <div className="lifestyle-chip">
+                      <span className="chip-k">Activity Tier</span>
+                      <span className="chip-v">{profile.activity_level || 'Moderately Active'}</span>
+                    </div>
+                    <div className="lifestyle-chip delta">
+                      <span className="chip-k">Weight Delta</span>
+                      <span className="chip-v highlight">
+                        {weightDelta > 0
+                          ? `+${weightDelta.toFixed(1)} kg Gain`
+                          : weightDelta < 0
+                          ? `${weightDelta.toFixed(1)} kg Cut`
+                          : '0.0 kg Maintenance'}
+                      </span>
                     </div>
                   </div>
 
@@ -466,44 +510,11 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </section>
-
-                {/* 3. Target Trajectory & Ambition */}
-                <section className="dash-card trajectory-card">
-                  <div className="card-top">
-                    <span className="card-tag">TRAJECTORY</span>
-                    <span className="card-badge-pill">{profile.primary_goal || 'Build strength'}</span>
-                  </div>
-                  <h3>Ambition & Lifestyle</h3>
-                  <div className="lifestyle-specs">
-                    <div className="spec-item">
-                      <span className="spec-label">Primary Goal</span>
-                      <span className="spec-value">{profile.primary_goal || 'Build Strength'}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Dietary Mode</span>
-                      <span className="spec-value">{profile.dietary_preference}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Activity Level</span>
-                      <span className="spec-value">{profile.activity_level || 'Moderately Active'}</span>
-                    </div>
-                    <div className="spec-item">
-                      <span className="spec-label">Weight Delta</span>
-                      <span className="spec-value highlight">
-                        {weightDelta > 0
-                          ? `+${weightDelta.toFixed(1)} kg Lean Gain`
-                          : weightDelta < 0
-                          ? `${weightDelta.toFixed(1)} kg Fat Loss`
-                          : '0.0 kg Maintenance'}
-                      </span>
-                    </div>
-                  </div>
-                </section>
               </aside>
             </div>
           </>
         )}
-      {/* ── GOAL & BIOMETRIC CALIBRATION MODAL (Proposal §6.1) ── */}
+      {/* ── GOAL & BIOMETRIC CALIBRATION MODAL  ── */}
       {showGoalModal && (
         <div className="diet-modal-overlay">
           <div className="diet-modal-box" style={{ maxWidth: 500 }}>
@@ -511,7 +522,7 @@ export default function Dashboard() {
               <div>
                 <h3 className="diet-modal-title">Edit Goals &amp; Biometrics</h3>
                 <span style={{ font: '11px "DM Mono", monospace', color: '#6a7e71', display: 'block', marginTop: 2 }}>
-                  RECALIBRATE METABOLIC TARGETS &bull; PROPOSAL §6.1
+                  RECALIBRATE METABOLIC TARGETS
                 </span>
               </div>
               <button onClick={() => setShowGoalModal(false)} className="diet-modal-close">

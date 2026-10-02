@@ -59,7 +59,7 @@ class GroceryCatalogItem(BaseModel):
     tags: List[str] = []
 
 
-# --- Nutritional Deficiency Schemas (Proposal §6.4) ---
+# --- Nutritional Deficiency Schemas  ---
 class DeficiencyDetail(BaseModel):
     nutrient: str
     status: str  # "Severely Deficient", "Moderate Shortage", "Optimal", "Surplus"
@@ -95,7 +95,7 @@ class NutritionalDeficiencyResponse(BaseModel):
     overall_health_score: int  # 0 to 100
 
 
-# --- Meal Plan Generation Schemas (Proposal §6.3) ---
+# --- Meal Plan Generation Schemas  ---
 class PlannedMeal(BaseModel):
     meal_type: str  # breakfast, lunch, dinner, snack
     recipe_id: str
@@ -127,7 +127,7 @@ class GeneratedMealPlanResponse(BaseModel):
     message: str
 
 
-# --- Smart Shopping List Schemas (Proposal §6.5) ---
+# --- Smart Shopping List Schemas  ---
 class ShoppingListItemCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=150)
     category: str = Field(default="Other", max_length=80)

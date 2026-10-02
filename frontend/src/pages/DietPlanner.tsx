@@ -231,7 +231,7 @@ export default function DietPlanner() {
     }
   };
 
-  // --- Meal Plan Generation (Proposal §6.3) ---
+  // --- Meal Plan Generation  ---
   const handleGeneratePlan = async () => {
     setPlanLoading(true);
     try {
@@ -246,7 +246,7 @@ export default function DietPlanner() {
     }
   };
 
-  // --- Shopping List Actions (Proposal §6.5) ---
+  // --- Shopping List Actions  ---
   const handleAddShoppingItem = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newShopName.trim()) return;
@@ -388,7 +388,7 @@ export default function DietPlanner() {
         <header className="dashboard-welcome-bar">
           <div>
             <div className="eyebrow">
-              <span /> PROPOSAL &sect;6.3 &amp; &sect;6.4 &bull; ZERO-WASTE ATHLETIC NUTRITION
+              <span /> SMART INVENTORY &bull; ZERO-WASTE ATHLETIC NUTRITION
             </div>
             <h1>Smart Grocery &amp; Diet Planner</h1>
             <p className="intro">
@@ -502,7 +502,7 @@ export default function DietPlanner() {
         </div>
 
         {/* ========================================================================= */}
-        {/* TAB 1: PANTRY INVENTORY MANAGER (Proposal §6.3)                           */}
+        {/* TAB 1: PANTRY INVENTORY MANAGER                            */}
         {/* ========================================================================= */}
         {activeTab === 'pantry' && (
           <div className="diet-section">
@@ -655,13 +655,13 @@ export default function DietPlanner() {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 2: NUTRITIONAL DEFICIENCY DETECTION (Proposal §6.4)                   */}
+        {/* TAB 2: NUTRITIONAL DEFICIENCY DETECTION                    */}
         {/* ========================================================================= */}
         {activeTab === 'deficiency' && deficiency && (
           <div className="diet-section">
             {/* Scientific Engine Callout */}
             <div className="deficiency-callout">
-              <span className="deficiency-callout-tag">✦ SPORTS SCIENCE ENGINE &bull; PROPOSAL &sect;6.4</span>
+              <span className="deficiency-callout-tag">✦ SPORTS SCIENCE ENGINE &bull; BIOMETRIC DEFICIENCY DETECTION</span>
               <h3>Comparing Current Pantry Supplies Against Calibrated Athlete Targets</h3>
               <p>
                 Unlike generic calorie counters that assume limitless ingredients, NutriSync calculates the net available
@@ -852,14 +852,14 @@ export default function DietPlanner() {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 3: SMART GROCERY MEAL PLAN GENERATOR (Proposal §6.3)                  */}
+        {/* TAB 3: SMART GROCERY MEAL PLAN GENERATOR                   */}
         {/* ========================================================================= */}
         {activeTab === 'mealplan' && (
           <div className="diet-section">
             {/* Meal Plan Generator Action Card */}
             <div className="mealplan-action-card">
               <div className="mealplan-action-text">
-                <span className="mealplan-badge">Proposal &sect;6.3 &bull; Zero Food Waste Engine</span>
+                <span className="mealplan-badge">Zero Food Waste Engine</span>
                 <h3 className="mealplan-h">Generate Meals Exclusively from Your Pantry</h3>
                 <p className="mealplan-desc">
                   NutriSync inspects your {pantry.length} stocked items and synthesizes delicious athletic meals
@@ -976,7 +976,7 @@ export default function DietPlanner() {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 4: SMART SHOPPING LIST (Proposal §6.5)                                */}
+        {/* TAB 4: SMART SHOPPING LIST                                 */}
         {/* ========================================================================= */}
         {activeTab === 'shopping' && (
           <div className="shopping-container">
