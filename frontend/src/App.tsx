@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import FlowingLinesBackground from './components/FlowingLinesBackground';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import OnboardingPage from './pages/Onboarding';
@@ -21,6 +22,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <Router>
+      {/* Global Smooth Flowing Streamlines Ambient Background */}
+      <FlowingLinesBackground />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
