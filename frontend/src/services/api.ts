@@ -1,10 +1,14 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 
-// Uses VITE_API_URL in production (e.g., https://nutrisync-api.onrender.com/api/v1) or falls back to localhost:8000
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+// Safely normalize baseURL: removes trailing slashes and ensures /api/v1 suffix
+let rawURL = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1').trim();
+rawURL = rawURL.replace(/\/+$/, '');
+if (!rawURL.endsWith('/api/v1')) {
+    rawURL = `${rawURL}/api/v1`;
+}
 
 const api = axios.create({
-    baseURL,
+    baseURL: rawURL,
     headers: {
         'Content-Type': 'application/json',
     },
