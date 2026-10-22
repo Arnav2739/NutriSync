@@ -1,3 +1,4 @@
+﻿import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import auth, profile, workout, progress, diet, cheat_meal
@@ -8,16 +9,22 @@ app = FastAPI(
     description="Backend API for NutriSync / FitWise AI"
 )
 
-# Enable CORS for React frontend (Vite default port 5173 / 8443)
+# Enable CORS for React frontend (Vite local dev + Vercel / Render cloud domains)
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
     "http://localhost:8443",
 ]
 
+# Allow custom frontend domain from environment variable if provided
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    origins.append(frontend_url.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app|https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,4 +42,3 @@ app.include_router(workout.router, prefix="/api/v1")
 app.include_router(progress.router, prefix="/api/v1")
 app.include_router(diet.router, prefix="/api/v1")
 app.include_router(cheat_meal.router, prefix="/api/v1")
-
